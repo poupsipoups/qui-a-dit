@@ -23,7 +23,7 @@ export function PillButton({ label, onPress, disabled = false, secondary = false
 const styles = StyleSheet.create({
   button: { minHeight: 52, alignItems: 'center', justifyContent: 'center', borderRadius: Radius.pill, paddingHorizontal: Spacing.lg },
   primary: { backgroundColor: Colors.action },
-  secondary: { backgroundColor: Colors.white },
+  secondary: { backgroundColor: Colors.white, borderWidth: 1.5, borderColor: Colors.hairline },
   onDark: { backgroundColor: Colors.anis },
   disabled: { backgroundColor: Colors.disabled },
   pressed: { transform: [{ scale: 0.98 }], opacity: 0.9 },
