@@ -13,7 +13,7 @@ export function HandoffPhase({ player, tone, onReady }: { player: Player; tone: 
         <AvatarImage uri={player.photoUri} name={player.name} size={180} fill={Colors.white} />
         <Text style={styles.name}>{player.name}</Text>
       </CandyCard>
-      <Text style={styles.hint}>Personne ne regarde la suite 🙈</Text>
+      <Text style={styles.hint}>Personne ne regarde la suite</Text>
       <PillButton label="C’est moi" onPress={onReady} />
     </View>
   );
