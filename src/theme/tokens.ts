@@ -1,5 +1,7 @@
 export const Colors = {
   background: "#F6C8D5",
+  /** Surface ton sur ton du fond rose : cartes et groupes qui restent discrets. */
+  blush: "#EFB1C4",
   ink: "#141B66",
   action: "#1236F0",
   actionPressed: "#0C28C4",

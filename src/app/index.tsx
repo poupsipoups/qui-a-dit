@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
   loadingText: { color: Colors.ink, ...Type.body },
   header: { flexDirection: 'row', alignItems: 'center', gap: Spacing.sm, paddingHorizontal: Spacing.lg, paddingTop: Spacing.md, paddingBottom: Spacing.md },
   title: { color: Colors.ink, ...Type.title, flex: 1 },
-  count: { flexDirection: 'row', alignItems: 'center', gap: 6, minHeight: 36, paddingHorizontal: Spacing.sm + 2, borderRadius: 18, backgroundColor: Colors.white },
+  count: { flexDirection: 'row', alignItems: 'center', gap: 6, minHeight: 36, paddingHorizontal: Spacing.sm + 2, borderRadius: 18, backgroundColor: Colors.blush },
   countText: { color: Colors.ink, ...Type.label },
   empty: { flex: 1, paddingHorizontal: Spacing.lg, paddingTop: Spacing.md },
   emptyAction: { alignSelf: 'stretch', marginTop: Spacing.sm },

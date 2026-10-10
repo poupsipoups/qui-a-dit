@@ -32,7 +32,7 @@ export function AddTile({ onPress }: { onPress: () => void }) {
 export const TileSpacer = () => <View style={styles.spacer} />;
 
 const styles = StyleSheet.create({
-  tile: { flex: 1, minHeight: 156, borderRadius: Radius.card, backgroundColor: Colors.white, alignItems: 'center', justifyContent: 'center', gap: Spacing.sm, padding: Spacing.md },
+  tile: { flex: 1, minHeight: 156, borderRadius: Radius.card, backgroundColor: Colors.blush, alignItems: 'center', justifyContent: 'center', gap: Spacing.sm, padding: Spacing.md },
   pressed: { transform: [{ scale: 0.97 }] },
   name: { color: Colors.ink, ...Type.heading, maxWidth: '100%' },
   add: { backgroundColor: 'transparent', borderWidth: 1.5, borderColor: Colors.hairline, borderStyle: 'dashed' },

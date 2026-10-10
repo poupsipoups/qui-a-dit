@@ -1,7 +1,7 @@
 import Feather from '@expo/vector-icons/Feather';
 import { router } from 'expo-router';
 import { useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { LayoutAnimation, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { PillButton } from '@/components/design';
@@ -19,16 +19,27 @@ export default function QuestionsScreen() {
   const suggested = questions.filter((question) => question.origin === 'suggestion');
   const activeCount = questions.filter((question) => !disabledQuestionIds.includes(question.id)).length;
 
-  const group = (title: string, items: Question[]) => (
+  const toggle = (id: string) => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    toggleQuestion(id);
+  };
+
+  // Les questions désactivées passent en bas de leur groupe ; l'ordre d'origine est conservé de chaque côté.
+  const activeFirst = (items: Question[]) => [...items.filter((item) => !disabledQuestionIds.includes(item.id)), ...items.filter((item) => disabledQuestionIds.includes(item.id))];
+
+  const group = (title: string, source: Question[]) => {
+    const items = activeFirst(source);
+    return (
     <View style={styles.section}>
       <Text style={styles.sectionLabel}>{title} · {items.length}</Text>
       <View style={styles.group}>
         {items.map((item, index) => (
-          <QuestionRow key={item.id} text={item.text} enabled={!disabledQuestionIds.includes(item.id)} onToggle={() => toggleQuestion(item.id)} last={index === items.length - 1} />
+          <QuestionRow key={item.id} text={item.text} enabled={!disabledQuestionIds.includes(item.id)} onToggle={() => toggle(item.id)} last={index === items.length - 1} />
         ))}
       </View>
     </View>
-  );
+    );
+  };
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -61,7 +72,7 @@ export default function QuestionsScreen() {
 const styles = StyleSheet.create({
   safeArea: { flex: 1, backgroundColor: Colors.background },
   header: { flexDirection: 'row', alignItems: 'center', gap: Spacing.sm + 2, paddingHorizontal: Spacing.lg, paddingTop: Spacing.sm, paddingBottom: Spacing.md },
-  back: { width: 44, height: 44, borderRadius: 22, backgroundColor: Colors.white, alignItems: 'center', justifyContent: 'center' },
+  back: { width: 44, height: 44, borderRadius: 22, backgroundColor: Colors.blush, alignItems: 'center', justifyContent: 'center' },
   backPressed: { opacity: 0.6 },
   titleBlock: { flex: 1 },
   title: { color: Colors.ink, ...Type.title },
@@ -70,6 +81,6 @@ const styles = StyleSheet.create({
   list: { paddingHorizontal: Spacing.lg, paddingTop: Spacing.sm, paddingBottom: Spacing.lg, gap: Spacing.lg },
   section: { gap: Spacing.sm },
   sectionLabel: { color: Colors.ink, ...Type.caps, fontSize: 12, paddingHorizontal: Spacing.xs },
-  group: { backgroundColor: Colors.white, borderRadius: Radius.card, overflow: 'hidden' },
+  group: { backgroundColor: Colors.blush, borderRadius: Radius.card, overflow: 'hidden' },
   footer: { paddingHorizontal: Spacing.lg, paddingTop: Spacing.sm, paddingBottom: Spacing.md, backgroundColor: Colors.background },
 });
