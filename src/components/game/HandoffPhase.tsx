@@ -26,7 +26,7 @@ export function HandoffPhase({ player, tone, onReady }: { player: Player; tone: 
 const styles = StyleSheet.create({
   screen: { flex: 1, alignItems: 'stretch', justifyContent: 'center', padding: Spacing.xl, gap: Spacing.lg },
   face: { alignItems: 'center' },
-  label: { color: Colors.ink, ...Type.heading, textAlign: 'center' },
+  label: { color: Colors.ink, ...Type.caps, fontSize: 15, textAlign: 'center' },
   card: { alignItems: 'center', gap: Spacing.md, padding: Spacing.xl },
   name: { color: Colors.ink, ...Type.hero },
   hint: { color: Colors.muted, ...Type.body, textAlign: 'center' },

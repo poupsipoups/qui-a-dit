@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
   chipPressed: { opacity: 0.5 },
   chipText: { color: Colors.ink, ...Type.label },
   // Pas de lineHeight sur un TextInput iOS : elle décale le texte vers le haut. Hauteur fixe + padding vertical nul = texte centré. Fond ciel et coins moyens : un champ, pas un bouton (les boutons sont des pilules).
-  input: { height: 56, borderRadius: 20, backgroundColor: Colors.sky, paddingHorizontal: Spacing.md, paddingVertical: 0, color: Colors.ink, fontSize: Type.body.fontSize, fontWeight: Type.body.fontWeight, textAlignVertical: 'center' },
+  input: { height: 56, borderRadius: 20, backgroundColor: Colors.sky, paddingHorizontal: Spacing.md, paddingVertical: 0, color: Colors.ink, fontFamily: Type.body.fontFamily, fontSize: Type.body.fontSize, textAlignVertical: 'center' },
   actions: { flexDirection: 'row', gap: Spacing.sm },
   action: { flex: 1 },
   remove: { minHeight: 44, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, marginTop: -Spacing.sm },

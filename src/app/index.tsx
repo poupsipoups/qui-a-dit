@@ -108,5 +108,5 @@ const styles = StyleSheet.create({
   needMore: { color: Colors.muted, ...Type.body, textAlign: 'center' },
   link: { minHeight: 44, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 2 },
   linkPressed: { opacity: 0.5 },
-  linkText: { color: Colors.ink, ...Type.label },
+  linkText: { color: Colors.ink, ...Type.caps },
 });

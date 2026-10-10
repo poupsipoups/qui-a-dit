@@ -15,7 +15,7 @@ export function PillButton({ label, onPress, disabled = false, secondary = false
       disabled={disabled}
       onPress={onPress}
       style={({ pressed }) => [styles.button, surface, outlined && styles.outlined, pressed && !disabled && styles.pressed]}>
-      <Text style={[styles.text, text]}>{label}</Text>
+      <Text numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.75} style={[styles.text, text]}>{label}</Text>
     </Pressable>
   );
 }
@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
   onDark: { backgroundColor: Colors.anis },
   disabled: { backgroundColor: Colors.disabled },
   pressed: { transform: [{ scale: 0.98 }], opacity: 0.9 },
-  text: { ...Type.heading, fontSize: 18, lineHeight: 24, fontWeight: '700' },
+  text: { ...Type.caps, fontSize: 13, letterSpacing: 1.6 },
   textLight: { color: Colors.white },
   textDark: { color: Colors.ink },
   textDisabled: { color: Colors.onDisabled },
