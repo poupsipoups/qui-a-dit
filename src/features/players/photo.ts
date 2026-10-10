@@ -24,7 +24,7 @@ export async function persistPlayerPhoto(sourceUri: string, playerId: string): P
   if (!directory.exists) directory.create({ idempotent: true, intermediates: true });
   const source = new File(sourceUri);
   const extension = source.extension || '.jpg';
-  const destination = new File(directory, `${playerId}${extension}`);
+  const destination = new File(directory, `${playerId}-${Date.now()}${extension}`);
   await source.copy(destination, { overwrite: true });
   return destination.uri;
 }

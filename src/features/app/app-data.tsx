@@ -20,6 +20,7 @@ type AppData = {
   questions: Question[];
   disabledQuestionIds: string[];
   addPlayer: (input: Player) => Promise<void>;
+  updatePlayer: (player: Player) => Promise<void>;
   removePlayer: (id: string) => Promise<void>;
   toggleQuestion: (id: string) => Promise<void>;
   addLocalSuggestion: (text: string) => Promise<'added' | 'duplicate'>;
@@ -60,6 +61,13 @@ export function AppDataProvider({ children }: PropsWithChildren) {
     await AsyncStorage.setItem(PLAYERS_KEY, JSON.stringify(next));
   };
 
+  const updatePlayer = async (player: Player) => {
+    const previous = players.find((item) => item.id === player.id);
+    const next = players.map((item) => (item.id === player.id ? player : item));
+    setPlayers(next);
+    await AsyncStorage.setItem(PLAYERS_KEY, JSON.stringify(next));
+    if (previous?.photoUri && previous.photoUri !== player.photoUri) removePlayerPhoto(previous.photoUri);
+  };
   const removePlayer = async (id: string) => {
     const player = players.find((item) => item.id === id);
     const next = players.filter((item) => item.id !== id);
@@ -95,7 +103,7 @@ export function AppDataProvider({ children }: PropsWithChildren) {
   };
 
   const questions = remoteQuestions.length ? remoteQuestions : [...seedQuestions, ...suggestions];
-  const value: AppData = { ready, players, questions, disabledQuestionIds, addPlayer, removePlayer, toggleQuestion, addLocalSuggestion };
+  const value: AppData = { ready, players, questions, disabledQuestionIds, addPlayer, updatePlayer, removePlayer, toggleQuestion, addLocalSuggestion };
   return <AppDataContext.Provider value={value}>{children}</AppDataContext.Provider>;
 }
 
