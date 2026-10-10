@@ -9,9 +9,10 @@ import { Colors, Spacing, Type } from '@/theme/tokens';
 
 function createPlayerId() { return `player-${Date.now()}-${Math.random().toString(36).slice(2)}`; }
 
-export function AddPlayerBottomSheet({ visible, onClose, onOpen, onAddPlayer }: { visible: boolean; onClose: () => void; onOpen: () => void; onAddPlayer: (player: Player) => Promise<void> }) {
-  const [name, setName] = useState('');
-  const [photoUri, setPhotoUri] = useState<string | null>(null);
+export function AddPlayerBottomSheet({ visible, editing = null, onClose, onOpen, onAddPlayer, onUpdatePlayer }: { visible: boolean; editing?: Player | null; onClose: () => void; onOpen: () => void; onAddPlayer: (player: Player) => Promise<void>; onUpdatePlayer: (player: Player) => Promise<void> }) {
+  // Le parent change la `key` quand `editing` change : l'état initial suffit.
+  const [name, setName] = useState(editing?.name ?? '');
+  const [photoUri, setPhotoUri] = useState<string | null>(editing?.photoUri ?? null);
   const [saving, setSaving] = useState(false);
 
   const close = () => { if (!saving) onClose(); };
@@ -26,17 +27,20 @@ export function AddPlayerBottomSheet({ visible, onClose, onOpen, onAddPlayer }: 
     const cleanName = name.trim();
     if (!cleanName) return Alert.alert('Il manque un prénom', 'Ajoute le prénom du joueur.');
     if (cleanName.length > 40) return Alert.alert('Prénom trop long', 'Choisis un prénom de 40 caractères maximum.');
-    const id = createPlayerId();
+    const id = editing?.id ?? createPlayerId();
     setSaving(true);
     try {
-      const savedPhoto = photoUri ? await persistPlayerPhoto(photoUri, id) : undefined;
-      await onAddPlayer({ id, name: cleanName, photoUri: savedPhoto, createdAt: new Date().toISOString() });
-      setName(''); setPhotoUri(null); onClose();
-    } catch { Alert.alert('Impossible d’ajouter ce joueur', 'La photo n’a pas pu être enregistrée.'); }
+      const photoChanged = photoUri !== (editing?.photoUri ?? null);
+      const savedPhoto = photoUri && photoChanged ? await persistPlayerPhoto(photoUri, id) : photoUri ?? undefined;
+      if (editing) await onUpdatePlayer({ ...editing, name: cleanName, photoUri: savedPhoto });
+      else await onAddPlayer({ id, name: cleanName, photoUri: savedPhoto, createdAt: new Date().toISOString() });
+      if (!editing) { setName(''); setPhotoUri(null); }
+      onClose();
+    } catch { Alert.alert('Impossible d’enregistrer ce joueur', 'La photo n’a pas pu être enregistrée.'); }
     finally { setSaving(false); }
   };
 
-  return <BottomSheet index={visible ? 0 : -1} onClose={onClose} snapPoints={['50%', '90%']} enablePanDownToClose backgroundStyle={{ backgroundColor: Colors.sheet }}><BottomSheetView style={styles.host}><View style={styles.content}><Text style={styles.title}>Nouveau joueur</Text><Pressable accessibilityRole="button" accessibilityLabel="Ajouter une photo" onPress={() => choosePhoto('library')} style={styles.photoPicker}><AvatarImage uri={photoUri ?? undefined} name={name} size={108} /></Pressable><View style={styles.photoActions}><Pressable accessibilityRole="button" hitSlop={14} onPress={() => choosePhoto('library')}><Text style={styles.link}>Galerie</Text></Pressable><Text style={styles.dot}>·</Text><Pressable accessibilityRole="button" hitSlop={14} onPress={() => choosePhoto('camera')}><Text style={styles.link}>Appareil photo</Text></Pressable></View><TextInput value={name} onChangeText={setName} placeholder="Prénom" placeholderTextColor={Colors.muted} autoCapitalize="words" maxLength={40} style={styles.input} /><View style={styles.buttons}><PillButton label="Annuler" secondary onPress={close} /><PillButton label={saving ? 'Ajout…' : 'Ajouter'} onPress={save} disabled={saving} /></View></View></BottomSheetView></BottomSheet>;
+  return <BottomSheet index={visible ? 0 : -1} onClose={onClose} snapPoints={['50%', '90%']} enablePanDownToClose backgroundStyle={{ backgroundColor: Colors.sheet }}><BottomSheetView style={styles.host}><View style={styles.content}><Text style={styles.title}>{editing ? 'Modifier le joueur' : 'Nouveau joueur'}</Text><Pressable accessibilityRole="button" accessibilityLabel="Ajouter une photo" onPress={() => choosePhoto('library')} style={styles.photoPicker}><AvatarImage uri={photoUri ?? undefined} name={name} size={108} /></Pressable><View style={styles.photoActions}><Pressable accessibilityRole="button" hitSlop={14} onPress={() => choosePhoto('library')}><Text style={styles.link}>Galerie</Text></Pressable><Text style={styles.dot}>·</Text><Pressable accessibilityRole="button" hitSlop={14} onPress={() => choosePhoto('camera')}><Text style={styles.link}>Appareil photo</Text></Pressable></View><TextInput value={name} onChangeText={setName} placeholder="Prénom" placeholderTextColor={Colors.muted} autoCapitalize="words" maxLength={40} style={styles.input} /><View style={styles.buttons}><PillButton label="Annuler" secondary onPress={close} /><PillButton label={saving ? 'Enregistrement…' : editing ? 'Enregistrer' : 'Ajouter'} onPress={save} disabled={saving} /></View></View></BottomSheetView></BottomSheet>;
 }
 
 const styles = StyleSheet.create({
