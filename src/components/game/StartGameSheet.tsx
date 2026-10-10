@@ -1,4 +1,5 @@
 import { BottomSheet, BottomSheetView } from '@expo/ui/community/bottom-sheet';
+import Feather from '@expo/vector-icons/Feather';
 import { useState } from 'react';
 import { Alert, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 
@@ -30,15 +31,17 @@ export function StartGameSheet({ visible, questions, onClose, onRandom, onPick, 
   };
 
   return (
-    <BottomSheet index={visible ? 0 : -1} onClose={close} snapPoints={mode === 'menu' ? ['40%'] : ['60%', '90%']} enablePanDownToClose backgroundStyle={{ backgroundColor: Colors.white }}>
+    <BottomSheet index={visible ? 0 : -1} onClose={close} snapPoints={mode === 'menu' ? ['50%'] : mode === 'pick' ? ['90%'] : ['60%', '90%']} enablePanDownToClose backgroundStyle={{ backgroundColor: Colors.white }}>
       <BottomSheetView style={styles.host}>
         <View style={styles.content}>
           {mode === 'menu' && (
             <>
               <Text style={styles.title}>Quelle question ?</Text>
-              <PillButton label="Au hasard" onPress={() => { close(); onRandom(); }} />
-              <PillButton label="Choisir dans la liste" secondary onPress={() => setMode('pick')} />
-              <PillButton label="Écrire la mienne" secondary onPress={() => setMode('write')} />
+              <View style={styles.options}>
+                <Option lead title="Au hasard" detail="On pioche pour vous" onPress={() => { close(); onRandom(); }} />
+                <Option title="Choisir" detail="Dans la liste des questions" onPress={() => setMode('pick')} />
+                <Option title="Écrire la mienne" detail="Rien que pour cette partie" onPress={() => setMode('write')} />
+              </View>
             </>
           )}
           {mode === 'pick' && (
@@ -79,9 +82,34 @@ export function StartGameSheet({ visible, questions, onClose, onRandom, onPick, 
   );
 }
 
+/** Ligne de choix : la première (`lead`) porte l'action rapide, les autres restent en retrait sur fond ciel. */
+function Option({ title, detail, lead = false, onPress }: { title: string; detail: string; lead?: boolean; onPress: () => void }) {
+  const textColor = lead ? Colors.white : Colors.ink;
+  return (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityLabel={`${title}. ${detail}`}
+      onPress={onPress}
+      style={({ pressed }) => [styles.option, lead ? styles.optionLead : styles.optionQuiet, pressed && styles.pressed]}>
+      <View style={styles.optionText}>
+        <Text style={[styles.optionTitle, { color: textColor }]}>{title}</Text>
+        <Text style={[styles.optionDetail, { color: lead ? Colors.white : Colors.muted }]}>{detail}</Text>
+      </View>
+      <Feather name="chevron-right" size={24} color={textColor} />
+    </Pressable>
+  );
+}
+
 const styles = StyleSheet.create({
   host: { flex: 1, width: '100%' },
-  content: { width: '100%', flex: 1, paddingHorizontal: Spacing.lg, paddingTop: Spacing.md, paddingBottom: Spacing.md, gap: Spacing.md },
+  content: { width: '100%', flex: 1, paddingHorizontal: Spacing.lg, paddingTop: Spacing.md, paddingBottom: Spacing.xl, gap: Spacing.md },
+  options: { gap: Spacing.sm, marginTop: Spacing.sm },
+  option: { minHeight: 76, flexDirection: 'row', alignItems: 'center', gap: Spacing.sm, borderRadius: 28, paddingVertical: Spacing.sm, paddingLeft: Spacing.lg, paddingRight: Spacing.md },
+  optionLead: { backgroundColor: Colors.action },
+  optionQuiet: { backgroundColor: Colors.sky },
+  optionText: { flex: 1 },
+  optionTitle: { ...Type.heading },
+  optionDetail: { ...Type.caption },
   title: { color: Colors.ink, ...Type.title, textAlign: 'center' },
   list: { flex: 1 },
   listContent: { gap: Spacing.sm },
