@@ -31,10 +31,10 @@ export default function HomeScreen() {
     <View style={styles.header}><Mascot size={56} /><Text style={styles.title}>Qui a dit ?</Text></View>
     <View style={styles.content}>
       <SectionLabel>Les joueurs · {players.length}/10</SectionLabel>
-      {players.length === 0 ? <EmptyState title="Qui vient jouer ?" detail="Ajoute au moins trois personnes. La photo est facultative : sans elle, ce sont leurs initiales." action={<View style={styles.emptyAction}><PillButton label="Ajouter un joueur" onPress={() => setSheetVisible(true)} /></View>} /> : <FlatList data={players} keyExtractor={(item) => item.id} contentContainerStyle={styles.playerList} renderItem={({ item, index }) => <PlayerCard player={item} index={index} onRemove={confirmRemovePlayer} />} ListFooterComponent={players.length < 10 ? <Pressable accessibilityRole="button" onPress={() => setSheetVisible(true)} style={styles.addCard}><Text style={styles.addText}>+ Ajouter un joueur</Text></Pressable> : null} />}
+      {players.length === 0 ? <EmptyState title="Qui vient jouer ?" detail="Ajoute les joueurs de la soirée." action={<View style={styles.emptyAction}><PillButton label="Ajouter un joueur" onPress={() => setSheetVisible(true)} /></View>} /> : <FlatList data={players} keyExtractor={(item) => item.id} contentContainerStyle={styles.playerList} renderItem={({ item, index }) => <PlayerCard player={item} index={index} onRemove={confirmRemovePlayer} />} ListFooterComponent={players.length < 10 ? <Pressable accessibilityRole="button" onPress={() => setSheetVisible(true)} style={styles.addCard}><Text style={styles.addText}>+ Ajouter un joueur</Text></Pressable> : null} />}
     </View>
     <View style={styles.footer}>{missing > 0 && <Text style={styles.needMore}>Encore {missing} joueur{missing > 1 ? 's' : ''} pour pouvoir jouer.</Text>}<PillButton label="On joue" onPress={startGame} disabled={!canPlay} /><PillButton label="Les questions" secondary onPress={() => router.push('/questions')} /></View>
-    <AddPlayerBottomSheet visible={sheetVisible} onClose={() => setSheetVisible(false)} onOpen={() => setSheetVisible(true)} onAddPlayer={addPlayer} />
+    <AddPlayerBottomSheet players={players} visible={sheetVisible} onClose={() => setSheetVisible(false)} onOpen={() => setSheetVisible(true)} onAddPlayer={addPlayer} />
   </SafeAreaView>;
 }
 
