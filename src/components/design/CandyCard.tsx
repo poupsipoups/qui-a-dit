@@ -3,7 +3,7 @@ import { StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
 
 import { Colors, Radius, Spacing } from '@/theme/tokens';
 
-type CardTone = 'white' | 'yellow' | 'mint' | 'lavender';
+type CardTone = 'white' | 'cream' | 'sky' | 'anis' | 'orange';
 
 export function CandyCard({ children, tone = 'white', style }: PropsWithChildren<{ tone?: CardTone; style?: StyleProp<ViewStyle> }>) {
   return <View style={[styles.card, { backgroundColor: Colors[tone] }, style]}>{children}</View>;

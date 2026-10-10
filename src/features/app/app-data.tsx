@@ -65,7 +65,7 @@ export function AppDataProvider({ children }: PropsWithChildren) {
     const next = players.filter((item) => item.id !== id);
     setPlayers(next);
     await AsyncStorage.setItem(PLAYERS_KEY, JSON.stringify(next));
-    if (player) removePlayerPhoto(player.photoUri);
+    if (player?.photoUri) removePlayerPhoto(player.photoUri);
   };
 
   const toggleQuestion = async (id: string) => {

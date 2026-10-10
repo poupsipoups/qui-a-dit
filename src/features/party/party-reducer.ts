@@ -4,6 +4,7 @@ import type { PartyPhase, Round } from './types';
 export type PartyState = { round: Round; phase: PartyPhase; draft: string; revealIndex: number };
 
 export type PartyAction =
+  | { type: 'start' }
   | { type: 'ready' }
   | { type: 'draft'; text: string }
   | { type: 'submit' }
@@ -12,13 +13,15 @@ export type PartyAction =
   | { type: 'next' };
 
 export function createPartyState(round: Round): PartyState {
-  return { round, phase: 'handoff', draft: '', revealIndex: 0 };
+  return { round, phase: 'intro', draft: '', revealIndex: 0 };
 }
 
 /** Une action invalide est ignorée : l’interface empêche déjà ces cas, la logique pure reste la garde finale. */
 export function partyReducer(state: PartyState, action: PartyAction): PartyState {
   const { round } = state;
   switch (action.type) {
+    case 'start':
+      return state.phase === 'intro' ? { ...state, phase: 'handoff' } : state;
     case 'ready':
       return state.phase === 'handoff' ? { ...state, phase: 'answer' } : state;
     case 'draft':
