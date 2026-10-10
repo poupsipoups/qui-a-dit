@@ -25,7 +25,7 @@ export function StartGameSheet({ visible, questions, onClose, onRandom, onPick, 
   const submit = () => {
     const cleaned = text.trim();
     if (cleaned.length < MIN_LENGTH) return Alert.alert('Un peu courte', `Écris une vraie question, avec au moins ${MIN_LENGTH} caractères.`);
-    setMode('menu'); setText('');
+    close();
     onWrite(cleaned);
   };
 
