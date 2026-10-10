@@ -9,7 +9,7 @@ type Props = { question: string; draft: string; onChange: (value: string) => voi
 export function AnswerPhase({ question, draft, onChange, onSubmit }: Props) {
   return (
     <KeyboardAvoidingView behavior="padding" style={styles.screen}>
-      <View style={styles.face}><Character expression="hush" background="pink" size={72} /></View>
+      <View style={styles.face}><Character expression="hush" background="pink" size={120} /></View>
       <CandyCard style={styles.card}>
         <Text style={styles.question}>{question}</Text>
       </CandyCard>
@@ -27,16 +27,18 @@ export function AnswerPhase({ question, draft, onChange, onSubmit }: Props) {
         style={styles.input}
       />
       <Text style={styles.count}>{draft.length}/280</Text>
+      <View style={styles.spacer} />
       <PillButton label="Valider et passer le téléphone" disabled={!draft.trim()} onPress={onSubmit} />
     </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
-  screen: { flex: 1, padding: Spacing.lg, gap: Spacing.md },
+  screen: { flex: 1, padding: Spacing.lg, gap: Spacing.sm },
+  spacer: { flex: 1 },
   face: { alignItems: 'center' },
   card: { padding: Spacing.md },
   question: { color: Colors.ink, ...Type.answer },
-  input: { flex: 1, minHeight: 80, padding: Spacing.md, borderRadius: 24, backgroundColor: Colors.white, color: Colors.ink, ...Type.heading, fontWeight: '500', textAlignVertical: 'top' },
+  input: { height: 92, padding: Spacing.md, borderRadius: 24, backgroundColor: Colors.white, color: Colors.ink, ...Type.heading, fontWeight: '500', textAlignVertical: 'top' },
   count: { color: Colors.muted, ...Type.caption, alignSelf: 'flex-end' },
 });
