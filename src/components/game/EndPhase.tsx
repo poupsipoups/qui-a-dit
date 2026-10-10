@@ -9,7 +9,7 @@ type Props = { players: Player[]; found: number; total: number; onReplay: () => 
 export function EndPhase({ players, found, total, onReplay, onHome }: Props) {
   return (
     <View style={styles.screen}>
-      <Character expression="love" background="pink" size={170} />
+      <Character expression="laugh" background="pink" size={170} />
       <Text style={styles.title}>C’est fini !</Text>
       <Text style={styles.detail}>
         Le groupe a trouvé {found} auteur{found > 1 ? 's' : ''} sur {total}.
