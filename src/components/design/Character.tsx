@@ -22,13 +22,12 @@ const TONGUE = '#FF9EC4';
 export function Character({ expression = 'happy', background = 'pink', size = 160 }: { expression?: Expression; background?: CharacterBackground; size?: number }) {
   const p = palettes[background];
   const stroke = { stroke: p.line, strokeWidth: 8, strokeLinecap: 'round' as const, fill: 'none' };
-  const outline = background === 'cream' ? { stroke: Colors.ink, strokeWidth: 2.5 } : null;
 
   /** Yeux blancs de l’icône ; `look` décale les pupilles. */
   const eyes = (look: [number, number] = [4, 8]) => (
     <>
-      <Ellipse cx={76} cy={62} rx={15} ry={25} fill={Colors.white} transform="rotate(-8 76 62)" {...outline} />
-      <Ellipse cx={136} cy={60} rx={16} ry={25} fill={Colors.white} transform="rotate(8 136 60)" {...outline} />
+      <Ellipse cx={76} cy={62} rx={15} ry={25} fill={Colors.white} transform="rotate(-8 76 62)" />
+      <Ellipse cx={136} cy={60} rx={16} ry={25} fill={Colors.white} transform="rotate(8 136 60)" />
       <Ellipse cx={76 + look[0]} cy={62 + look[1]} rx={9} ry={12} fill={Colors.ink} />
       <Ellipse cx={136 + look[0]} cy={60 + look[1]} rx={9.5} ry={12.5} fill={Colors.ink} />
     </>
@@ -73,8 +72,11 @@ export function Character({ expression = 'happy', background = 'pink', size = 16
       )}
       {expression === 'thinking' && (
         <>
-          {eyes([6, -8])}
-          <Path d="M86 112 L126 106" {...stroke} />
+          <Ellipse cx={76} cy={62} rx={15} ry={25} fill={Colors.white} />
+          <Ellipse cx={136} cy={60} rx={16} ry={25} fill={Colors.white} />
+          <Ellipse cx={68} cy={52} rx={9} ry={12} fill={Colors.ink} />
+          <Ellipse cx={128} cy={50} rx={9} ry={12} fill={Colors.ink} />
+          <Ellipse cx={88} cy={114} rx={8} ry={6} fill={Colors.ink} />
         </>
       )}
       {expression === 'laugh' && (
