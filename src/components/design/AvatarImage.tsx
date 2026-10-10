@@ -1,17 +1,17 @@
-import { Image, StyleSheet, Text, View, type ImageSourcePropType } from 'react-native';
+import { Image, StyleSheet, View, type ImageSourcePropType } from 'react-native';
 
-import { playerInitials } from '@/features/players/initials';
+import { characterFor } from '@/features/players/character';
+import type { Character } from '@/features/players/types';
 import { Colors } from '@/theme/tokens';
 
-const fills = [Colors.anis, Colors.sky, Colors.orange, Colors.background] as const;
-const fillFor = (name: string) => fills[Array.from(name).reduce((sum, char) => sum + char.codePointAt(0)!, 0) % fills.length];
+import { PlayerCharacter } from './PlayerCharacter';
 
-export function AvatarImage({ uri, name, size = 62, selected = false, disabled = false, fill }: { uri?: string; name: string; size?: number; selected?: boolean; disabled?: boolean; fill?: string }) {
-  const initials = playerInitials(name);
-  return <View style={[styles.avatar, { width: size, height: size, borderRadius: size / 2, backgroundColor: fill ?? fillFor(name) }, selected && styles.selected, disabled && styles.disabled]}>{uri ? <Image source={{ uri } as ImageSourcePropType} resizeMode="cover" style={styles.image} /> : <Text style={[styles.initials, { fontSize: size * 0.38 }]}>{initials}</Text>}</View>;
+/** Photo du joueur ; sans photo, son petit personnage (`character`, ou à défaut dérivé de `seed`, l'id). */
+export function AvatarImage({ uri, seed, character, size = 62, selected = false, disabled = false }: { uri?: string; seed: string; character?: Character; size?: number; selected?: boolean; disabled?: boolean }) {
+  return <View style={[styles.avatar, { width: size, height: size, borderRadius: size / 2 }, selected && styles.selected, disabled && styles.disabled]}>{uri ? <Image source={{ uri } as ImageSourcePropType} resizeMode="cover" style={styles.image} /> : <PlayerCharacter character={character ?? characterFor(seed)} />}</View>;
 }
 
 const styles = StyleSheet.create({
   avatar: { overflow: 'hidden', alignItems: 'center', justifyContent: 'center', borderWidth: 3, borderColor: 'transparent' },
-  selected: { borderColor: Colors.ink, transform: [{ scale: 1.04 }] }, disabled: { opacity: 0.45 }, image: { width: '100%', height: '100%' }, initials: { color: Colors.ink, fontWeight: '800' },
+  selected: { borderColor: Colors.ink, transform: [{ scale: 1.04 }] }, disabled: { opacity: 0.45 }, image: { width: '100%', height: '100%' },
 });

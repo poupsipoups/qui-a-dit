@@ -15,7 +15,7 @@ export function EndPhase({ players, found, total, onReplay, onHome }: Props) {
         Le groupe a trouvé {found} auteur{found > 1 ? 's' : ''} sur {total}.
       </Text>
       <View style={styles.faces}>
-        {players.map((player) => <AvatarImage key={player.id} uri={player.photoUri} name={player.name} size={56} />)}
+        {players.map((player) => <AvatarImage key={player.id} uri={player.photoUri} seed={player.id} character={player.character} size={56} />)}
       </View>
       <View style={styles.actions}>
         <PillButton label="Rejouer avec les mêmes" onPress={onReplay} />
