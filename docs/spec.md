@@ -39,7 +39,7 @@ flowchart TD
 
 ### Règles
 
-- **3 à 10 joueurs.** Photos obligatoires (écran de vote = visages).
+- **3 à 10 joueurs.** Photo facultative : sans photo, l’écran de vote affiche les initiales (deux premiers mots, ou deux premières lettres d’un mot seul).
 - **Un téléphone, vote collectif** : le groupe choisit une personne par réponse.
 - **Une personne par réponse et par question** ; la dernière carte est forcée.
 - **Vote guidé** : les visages déjà attribués restent visibles mais sont désactivés. Un retour au vote précédent annule ce vote et réactive le visage ; pour la dernière réponse, l’app affiche clairement la seule personne restante avant validation.

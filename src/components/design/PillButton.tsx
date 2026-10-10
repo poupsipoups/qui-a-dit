@@ -9,7 +9,7 @@ export function PillButton({ label, onPress, disabled = false, secondary = false
       disabled={disabled}
       onPress={onPress}
       className={`min-h-[52px] items-center justify-center rounded-full px-6 ${surface} ${disabled ? '' : 'active:scale-[0.98] active:opacity-90'}`}>
-      <Text className={`text-base font-bold ${secondary && !disabled ? 'text-berry' : 'text-white'}`}>{label}</Text>
+      <Text className={`text-lg font-bold ${disabled ? 'text-on-disabled' : secondary ? 'text-berry' : 'text-white'}`}>{label}</Text>
     </Pressable>
   );
 }

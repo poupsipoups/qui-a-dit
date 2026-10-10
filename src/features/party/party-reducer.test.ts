@@ -8,17 +8,25 @@ const question: Question = { id: 'q1', text: 'Quel est ton talent le plus inutil
 const players: Player[] = ['a', 'b', 'c'].map((id) => ({ id, name: id, photoUri: 'file://x.jpg', createdAt: '2026-01-01T00:00:00.000Z' }));
 
 const run = (state: PartyState, ...actions: PartyAction[]) => actions.reduce(partyReducer, state);
+const newGame = () => run(createPartyState(createRound(question, players)), { type: 'start' });
 const answerTurn = (state: PartyState, text: string) => run(state, { type: 'ready' }, { type: 'draft', text }, { type: 'submit' });
 
 function votingState() {
-  let state = createPartyState(createRound(question, players));
+  let state = newGame();
   for (const text of ['un', 'deux', 'trois']) state = answerTurn(state, text);
   return state;
 }
 
 describe('partyReducer', () => {
+  it('commence par la question commune avant le premier passage', () => {
+    const intro = createPartyState(createRound(question, players));
+    expect(intro.phase).toBe('intro');
+    expect(partyReducer(intro, { type: 'ready' })).toBe(intro);
+    expect(partyReducer(intro, { type: 'start' }).phase).toBe('handoff');
+  });
+
   it('passe de handoff à answer puis revient à handoff après une réponse', () => {
-    const start = createPartyState(createRound(question, players));
+    const start = newGame();
     const answering = run(start, { type: 'ready' });
     expect(answering.phase).toBe('answer');
     const next = answerTurn(start, 'salut');
@@ -28,7 +36,7 @@ describe('partyReducer', () => {
   });
 
   it('ignore une réponse vide', () => {
-    const answering = run(createPartyState(createRound(question, players)), { type: 'ready' }, { type: 'draft', text: '   ' });
+    const answering = run(newGame(), { type: 'ready' }, { type: 'draft', text: '   ' });
     expect(partyReducer(answering, { type: 'submit' })).toBe(answering);
   });
 

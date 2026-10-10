@@ -10,8 +10,9 @@
   --color-yellow: #fbec9d;
   --color-mint: #cdf58f;
   --color-lavender: #e3d4ff;
-  --color-muted: #826d79;
+  --color-muted: #664b5c;
   --color-disabled: #d6bcc6;
+  --color-on-disabled: #5e4455;
 
   --radius-card: 28px;
 }

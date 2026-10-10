@@ -7,12 +7,15 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { AnswerPhase } from '@/components/game/AnswerPhase';
 import { CenteredMessage } from '@/components/game/CenteredMessage';
 import { GameTopbar } from '@/components/game/GameTopbar';
+import { EndPhase } from '@/components/game/EndPhase';
 import { HandoffPhase } from '@/components/game/HandoffPhase';
+import { IntroPhase } from '@/components/game/IntroPhase';
 import { RevealPhase } from '@/components/game/RevealPhase';
 import { VotePhase } from '@/components/game/VotePhase';
 import { useAppData } from '@/features/app/app-data';
 import { answerForId, availablePlayerIds, createRound, voteForAnswer } from '@/features/party/logic';
 import { createPartyState, partyReducer } from '@/features/party/party-reducer';
+import type { Player } from '@/features/players/types';
 import type { Round } from '@/features/party/types';
 import { Colors } from '@/theme/tokens';
 
@@ -20,6 +23,11 @@ const goHome = () => router.replace('/');
 
 export default function GameScreen() {
   const { questionId } = useLocalSearchParams<{ questionId: string }>();
+  // La clé repart d’une manche neuve quand on rejoue avec une autre question.
+  return <Game key={questionId} questionId={questionId} />;
+}
+
+function Game({ questionId }: { questionId: string }) {
   const { players, questions } = useAppData();
   // La manche est créée une seule fois : un rafraîchissement du catalogue ne doit pas l’interrompre.
   const [round] = useState(() => {
@@ -34,7 +42,7 @@ export default function GameScreen() {
 }
 
 function Party({ round: initialRound }: { round: Round }) {
-  const { players } = useAppData();
+  const { players, questions, disabledQuestionIds } = useAppData();
   const [state, dispatch] = useReducer(partyReducer, initialRound, createPartyState);
   const playerById = useMemo(() => new Map(players.map((player) => [player.id, player])), [players]);
   const inProgress = state.phase !== 'complete';
@@ -53,6 +61,15 @@ function Party({ round: initialRound }: { round: Round }) {
     return () => subscription.remove();
   }, [inProgress, leave]);
 
+  // Rejouer : mêmes joueurs, nouvelle question active (différente si possible).
+  const replay = () => {
+    const active = questions.filter((item) => !disabledQuestionIds.includes(item.id));
+    const others = active.filter((item) => item.id !== initialRound.question.id);
+    const pool = others.length ? others : active;
+    const next = pool[Math.floor(Math.random() * pool.length)];
+    if (next) router.replace({ pathname: '/game', params: { questionId: next.id } });
+  };
+
   const { round, phase, draft, revealIndex } = state;
   const total = round.turnOrder.length;
   const turnIndex = round.answers.length;
@@ -63,10 +80,19 @@ function Party({ round: initialRound }: { round: Round }) {
   const revealAnswerId = round.shuffledAnswerIds?.[revealIndex];
   const revealAnswer = revealAnswerId ? answerForId(round, revealAnswerId) : undefined;
 
+  if (phase === 'intro') {
+    return (
+      <Frame>
+        <GameTopbar label="La question" onLeave={leave} />
+        <IntroPhase question={round.question.text} onStart={() => dispatch({ type: 'start' })} />
+      </Frame>
+    );
+  }
+
   if (phase === 'handoff' && currentPlayer) {
     return (
       <Frame>
-        <GameTopbar label={`Réponse ${turnIndex + 1}/${total}`} onLeave={leave} />
+        <GameTopbar label={`${turnIndex} sur ${total} ont répondu`} onLeave={leave} />
         <HandoffPhase player={currentPlayer} tone={turnIndex % 2 ? 'yellow' : 'mint'} onReady={() => dispatch({ type: 'ready' })} />
       </Frame>
     );
@@ -108,12 +134,13 @@ function Party({ round: initialRound }: { round: Round }) {
       <Frame>
         <GameTopbar label={`Révélation ${revealIndex + 1}/${total}`} />
         <RevealPhase
+          key={revealAnswer.id}
           answer={revealAnswer.text}
           guessed={guessedId ? playerById.get(guessedId) : undefined}
           author={playerById.get(revealAnswer.authorId)}
           isLast={isLast}
           onNext={() => {
-            void (isLast ? Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success) : Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light));
+            void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
             dispatch({ type: 'next' });
           }}
         />
@@ -123,7 +150,13 @@ function Party({ round: initialRound }: { round: Round }) {
 
   return (
     <Frame>
-      <CenteredMessage title="C’est fini !" detail="Vous connaissez maintenant tous les petits secrets de la table." actionLabel="Nouvelle partie" onAction={goHome} />
+      <EndPhase
+        players={round.turnOrder.map((id) => playerById.get(id)).filter((player): player is Player => !!player)}
+        found={round.votes.filter((vote) => answerForId(round, vote.answerId)?.authorId === vote.guessedPlayerId).length}
+        total={total}
+        onReplay={replay}
+        onHome={goHome}
+      />
     </Frame>
   );
 }
