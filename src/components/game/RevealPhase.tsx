@@ -1,6 +1,5 @@
 import * as Haptics from 'expo-haptics';
 import { StyleSheet, Text, View } from 'react-native';
-import Animated, { FadeIn, ZoomIn } from 'react-native-reanimated';
 
 import { AvatarImage, CandyCard, Character, PillButton } from '@/components/design';
 import type { Player } from '@/features/players/types';
@@ -8,7 +7,7 @@ import { Colors, Spacing, Type } from '@/theme/tokens';
 
 type Props = { answer: string; guessed?: Player; author?: Player; revealed: boolean; isLast: boolean; onReveal: () => void; onNext: () => void };
 
-/** Deux temps : le choix du groupe, puis la vérité (le fond de l’écran passe en anis ou en orange, géré par `game.tsx`). */
+/** Deux temps : le choix du groupe, puis la vérité. Sans animation : le fond de l’écran change simplement (géré par `game.tsx`). */
 export function RevealPhase({ answer, guessed, author, revealed, isLast, onReveal, onNext }: Props) {
   const correct = !!guessed && guessed.id === author?.id;
 
@@ -33,15 +32,13 @@ export function RevealPhase({ answer, guessed, author, revealed, isLast, onRevea
         </>
       ) : (
         <>
-          <Animated.View entering={ZoomIn.springify().damping(14)} style={styles.result}>
-            <Character expression={correct ? 'laugh' : 'shock'} background={correct ? 'anis' : 'orange'} size={120} />
+          <View style={styles.result}>
+            <Character expression={correct ? 'laugh' : 'sad'} background={correct ? 'anis' : 'orange'} size={120} />
             <Text style={styles.resultLabel}>{correct ? 'Bien vu, c’était…' : 'Raté, c’était…'}</Text>
             {author && <AvatarImage uri={author.photoUri} name={author.name} size={180} />}
             <Text style={styles.author}>{author?.name}</Text>
-            <Animated.Text entering={FadeIn.delay(250)} style={styles.mark}>
-              {correct ? 'Le groupe a trouvé !' : 'Personne n’y avait pensé !'}
-            </Animated.Text>
-          </Animated.View>
+            <Text style={styles.mark}>{correct ? 'Le groupe a trouvé !' : 'Personne n’y avait pensé !'}</Text>
+          </View>
           <PillButton label={isLast ? 'Voir la fin' : 'Révélation suivante'} onPress={onNext} />
         </>
       )}

@@ -7,7 +7,7 @@ import { Colors, Spacing, Type } from '@/theme/tokens';
 export function IntroPhase({ question, onStart }: { question: string; onStart: () => void }) {
   return (
     <View style={styles.screen}>
-      <View style={styles.face}><Character expression="curious" background="blue" size={160} /></View>
+      <View style={styles.face}><Character expression="secret" background="blue" size={160} /></View>
       <Text style={styles.title}>Voici la question</Text>
       <CandyCard tone="sky" style={styles.card}>
         <Text style={styles.question}>{question}</Text>
