@@ -39,7 +39,7 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: Colors.background }, loading: { flex: 1, backgroundColor: Colors.background, alignItems: 'center', justifyContent: 'center' }, loadingText: { color: Colors.berry, ...Type.body },
+  safeArea: { flex: 1, backgroundColor: Colors.background }, loading: { flex: 1, backgroundColor: Colors.background, alignItems: 'center', justifyContent: 'center' }, loadingText: { color: Colors.ink, ...Type.body },
   header: { flexDirection: 'row', alignItems: 'center', gap: Spacing.sm, paddingHorizontal: Spacing.lg, paddingTop: Spacing.md, paddingBottom: Spacing.lg }, title: { color: Colors.ink, ...Type.title }, content: { flex: 1, paddingHorizontal: Spacing.lg, gap: Spacing.md }, playerList: { gap: Spacing.sm, paddingBottom: Spacing.xl },
-  addCard: { minHeight: 64, borderRadius: 24, alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: Colors.hairline, borderStyle: 'dashed' }, addText: { color: Colors.berry, ...Type.label }, emptyAction: { alignSelf: 'stretch', marginTop: Spacing.sm }, footer: { gap: Spacing.sm, padding: Spacing.lg, backgroundColor: Colors.background }, needMore: { color: Colors.muted, ...Type.body, textAlign: 'center' },
+  addCard: { minHeight: 64, borderRadius: 24, alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: Colors.hairline, borderStyle: 'dashed' }, addText: { color: Colors.ink, ...Type.label }, emptyAction: { alignSelf: 'stretch', marginTop: Spacing.sm }, footer: { gap: Spacing.sm, padding: Spacing.lg, backgroundColor: Colors.background }, needMore: { color: Colors.muted, ...Type.body, textAlign: 'center' },
 });

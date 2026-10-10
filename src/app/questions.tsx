@@ -19,4 +19,4 @@ export default function QuestionsScreen() {
   </SafeAreaView>;
 }
 
-const styles = StyleSheet.create({ safeArea: { flex: 1, backgroundColor: Colors.background }, header: { flexDirection: 'row', alignItems: 'center', gap: Spacing.md, padding: Spacing.lg }, backHit: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center' }, back: { color: Colors.berry, fontSize: 42, lineHeight: 44 }, title: { color: Colors.ink, ...Type.title }, list: { paddingHorizontal: Spacing.lg, gap: Spacing.sm, paddingBottom: Spacing.xl }, sectionGap: { gap: Spacing.sm, marginTop: Spacing.lg } });
+const styles = StyleSheet.create({ safeArea: { flex: 1, backgroundColor: Colors.background }, header: { flexDirection: 'row', alignItems: 'center', gap: Spacing.md, padding: Spacing.lg }, backHit: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center' }, back: { color: Colors.ink, fontSize: 42, lineHeight: 44 }, title: { color: Colors.ink, ...Type.title }, list: { paddingHorizontal: Spacing.lg, gap: Spacing.sm, paddingBottom: Spacing.xl }, sectionGap: { gap: Spacing.sm, marginTop: Spacing.lg } });

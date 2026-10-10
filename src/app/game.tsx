@@ -19,6 +19,9 @@ import type { Player } from '@/features/players/types';
 import type { Round } from '@/features/party/types';
 import { Colors } from '@/theme/tokens';
 
+type Background = 'pink' | 'blue' | 'cream' | 'anis' | 'orange';
+const backgrounds: Record<Background, string> = { pink: Colors.background, blue: Colors.action, cream: Colors.cream, anis: Colors.anis, orange: Colors.orange };
+
 const goHome = () => router.replace('/');
 
 export default function GameScreen() {
@@ -70,6 +73,7 @@ function Party({ round: initialRound }: { round: Round }) {
     if (next) router.replace({ pathname: '/game', params: { questionId: next.id } });
   };
 
+  const [revealedIndex, setRevealedIndex] = useState<number | null>(null);
   const { round, phase, draft, revealIndex } = state;
   const total = round.turnOrder.length;
   const turnIndex = round.answers.length;
@@ -82,8 +86,8 @@ function Party({ round: initialRound }: { round: Round }) {
 
   if (phase === 'intro') {
     return (
-      <Frame>
-        <GameTopbar label="La question" onLeave={leave} />
+      <Frame background="blue">
+        <GameTopbar label="La question" onLeave={leave} onDark />
         <IntroPhase question={round.question.text} onStart={() => dispatch({ type: 'start' })} />
       </Frame>
     );
@@ -93,7 +97,7 @@ function Party({ round: initialRound }: { round: Round }) {
     return (
       <Frame>
         <GameTopbar label={`${turnIndex} sur ${total} ont répondu`} onLeave={leave} />
-        <HandoffPhase player={currentPlayer} tone={turnIndex % 2 ? 'yellow' : 'mint'} onReady={() => dispatch({ type: 'ready' })} />
+        <HandoffPhase player={currentPlayer} tone={turnIndex % 2 ? 'sky' : 'anis'} onReady={() => dispatch({ type: 'ready' })} />
       </Frame>
     );
   }
@@ -114,7 +118,7 @@ function Party({ round: initialRound }: { round: Round }) {
 
   if (phase === 'vote' && votingAnswer) {
     return (
-      <Frame>
+      <Frame background="cream">
         <GameTopbar label={`Qui a dit · ${round.votes.length + 1}/${total}`} onLeave={leave} />
         <VotePhase
           answer={votingAnswer.text}
@@ -130,14 +134,18 @@ function Party({ round: initialRound }: { round: Round }) {
   if (phase === 'reveal' && revealAnswer) {
     const isLast = revealIndex + 1 >= total;
     const guessedId = voteForAnswer(round, revealAnswer.id)?.guessedPlayerId;
+    const revealed = revealedIndex === revealIndex;
+    const found = !!guessedId && guessedId === revealAnswer.authorId;
     return (
-      <Frame>
+      <Frame background={revealed ? (found ? 'anis' : 'orange') : 'pink'}>
         <GameTopbar label={`Révélation ${revealIndex + 1}/${total}`} />
         <RevealPhase
           key={revealAnswer.id}
           answer={revealAnswer.text}
           guessed={guessedId ? playerById.get(guessedId) : undefined}
           author={playerById.get(revealAnswer.authorId)}
+          revealed={revealed}
+          onReveal={() => setRevealedIndex(revealIndex)}
           isLast={isLast}
           onNext={() => {
             void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -161,8 +169,8 @@ function Party({ round: initialRound }: { round: Round }) {
   );
 }
 
-function Frame({ children }: { children: ReactNode }) {
-  return <SafeAreaView style={styles.safeArea}>{children}</SafeAreaView>;
+function Frame({ children, background = 'pink' }: { children: ReactNode; background?: Background }) {
+  return <SafeAreaView style={[styles.safeArea, { backgroundColor: backgrounds[background] }]}>{children}</SafeAreaView>;
 }
 
 const styles = StyleSheet.create({ safeArea: { flex: 1, backgroundColor: Colors.background } });

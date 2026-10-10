@@ -1,18 +1,19 @@
 @import 'tailwindcss';
 @import 'uniwind';
 
-/* Tokens alignés sur src/theme/tokens.ts : bg-berry, text-ink, rounded-card… */
+/* Tokens alignés sur src/theme/tokens.ts : bg-action, text-ink, rounded-card… */
 @theme {
   --color-background: #f6c8d5;
-  --color-ink: #19171b;
-  --color-berry: #633a5a;
-  --color-berry-pressed: #4c2944;
-  --color-yellow: #fbec9d;
-  --color-mint: #cdf58f;
-  --color-lavender: #e3d4ff;
-  --color-muted: #664b5c;
-  --color-disabled: #d6bcc6;
-  --color-on-disabled: #5e4455;
+  --color-ink: #141b66;
+  --color-action: #3d5cf0;
+  --color-action-pressed: #2f49d0;
+  --color-cream: #fff8ea;
+  --color-sky: #d2eeff;
+  --color-anis: #b2e61a;
+  --color-orange: #ff7a1a;
+  --color-muted: #343c86;
+  --color-disabled: #c9cdef;
+  --color-on-disabled: #343c86;
 
   --radius-card: 28px;
 }

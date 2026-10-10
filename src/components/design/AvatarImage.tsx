@@ -3,7 +3,7 @@ import { Image, StyleSheet, Text, View, type ImageSourcePropType } from 'react-n
 import { playerInitials } from '@/features/players/initials';
 import { Colors } from '@/theme/tokens';
 
-const fills = [Colors.lavender, Colors.mint, Colors.yellow] as const;
+const fills = [Colors.anis, Colors.sky, Colors.orange, Colors.white] as const;
 const fillFor = (name: string) => fills[Array.from(name).reduce((sum, char) => sum + char.codePointAt(0)!, 0) % fills.length];
 
 export function AvatarImage({ uri, name, size = 62, selected = false, disabled = false }: { uri?: string; name: string; size?: number; selected?: boolean; disabled?: boolean }) {
@@ -13,5 +13,5 @@ export function AvatarImage({ uri, name, size = 62, selected = false, disabled =
 
 const styles = StyleSheet.create({
   avatar: { overflow: 'hidden', alignItems: 'center', justifyContent: 'center', borderWidth: 3, borderColor: 'transparent' },
-  selected: { borderColor: Colors.berry, transform: [{ scale: 1.04 }] }, disabled: { opacity: 0.45 }, image: { width: '100%', height: '100%' }, initials: { color: Colors.berry, fontWeight: '800' },
+  selected: { borderColor: Colors.ink, transform: [{ scale: 1.04 }] }, disabled: { opacity: 0.45 }, image: { width: '100%', height: '100%' }, initials: { color: Colors.ink, fontWeight: '800' },
 });

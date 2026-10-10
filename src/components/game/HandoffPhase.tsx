@@ -4,7 +4,7 @@ import { AvatarImage, CandyCard, PillButton } from '@/components/design';
 import type { Player } from '@/features/players/types';
 import { Colors, Spacing, Type } from '@/theme/tokens';
 
-export function HandoffPhase({ player, tone, onReady }: { player: Player; tone: 'yellow' | 'mint'; onReady: () => void }) {
+export function HandoffPhase({ player, tone, onReady }: { player: Player; tone: 'sky' | 'anis'; onReady: () => void }) {
   return (
     <View style={styles.screen}>
       <Text style={styles.label}>Passe le téléphone à</Text>
@@ -20,7 +20,7 @@ export function HandoffPhase({ player, tone, onReady }: { player: Player; tone: 
 
 const styles = StyleSheet.create({
   screen: { flex: 1, alignItems: 'stretch', justifyContent: 'center', padding: Spacing.xl, gap: Spacing.lg },
-  label: { color: Colors.berry, ...Type.heading, textAlign: 'center' },
+  label: { color: Colors.ink, ...Type.heading, textAlign: 'center' },
   card: { alignItems: 'center', gap: Spacing.md, padding: Spacing.xl },
   name: { color: Colors.ink, ...Type.hero },
   hint: { color: Colors.muted, ...Type.body, textAlign: 'center' },

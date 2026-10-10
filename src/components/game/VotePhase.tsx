@@ -16,7 +16,7 @@ export function VotePhase({ answer, players, availableIds, onVote, onUndo }: Pro
         <Text style={styles.answer}>“{answer}”</Text>
       </CandyCard>
       {forced ? (
-        <CandyCard tone="lavender" style={styles.forced}>
+        <CandyCard tone="sky" style={styles.forced}>
           <Text style={styles.forcedLabel}>Plus qu’une personne possible</Text>
           {forcedPlayer && <AvatarImage uri={forcedPlayer.photoUri} name={forcedPlayer.name} size={120} />}
           <Text style={styles.forcedName}>{forcedPlayer?.name}</Text>
