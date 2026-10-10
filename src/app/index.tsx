@@ -5,6 +5,7 @@ import { Alert, FlatList, Pressable, StyleSheet, Text, View } from 'react-native
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { EmptyState, Mascot, PillButton } from '@/components/design';
+import { StartGameSheet } from '@/components/game/StartGameSheet';
 import { AddPlayerBottomSheet } from '@/components/players/AddPlayerBottomSheet';
 import { AddTile, PlayerTile, TileSpacer } from '@/components/players/PlayerTile';
 import { useAppData } from '@/features/app/app-data';
@@ -18,6 +19,7 @@ type Cell = { kind: 'player'; player: Player } | { kind: 'add' } | { kind: 'spac
 export default function HomeScreen() {
   const { ready, players, questions, disabledQuestionIds, addPlayer, updatePlayer, removePlayer } = useAppData();
   const [sheetVisible, setSheetVisible] = useState(false);
+  const [startVisible, setStartVisible] = useState(false);
   const [editingPlayer, setEditingPlayer] = useState<Player | null>(null);
   const openSheet = (player: Player | null) => { setEditingPlayer(player); setSheetVisible(true); };
   const activeQuestions = questions.filter((question) => !disabledQuestionIds.includes(question.id));
@@ -32,6 +34,9 @@ export default function HomeScreen() {
   const startGame = () => {
     if (players.length < 3) return Alert.alert('Encore un peu de monde', 'Il faut au moins 3 joueurs pour que le vote soit drôle.');
     if (!activeQuestions.length) return Alert.alert('Aucune question active', 'Réactive une question dans « Les questions ».');
+    setStartVisible(true);
+  };
+  const playRandom = () => {
     const question = activeQuestions[Math.floor(Math.random() * activeQuestions.length)];
     router.push({ pathname: '/game', params: { questionId: question.id } });
   };
@@ -77,6 +82,15 @@ export default function HomeScreen() {
           <Feather name="chevron-right" size={18} color={Colors.ink} />
         </Pressable>
       </View>
+
+      <StartGameSheet
+        visible={startVisible}
+        questions={activeQuestions}
+        onClose={() => setStartVisible(false)}
+        onRandom={playRandom}
+        onPick={(question) => router.push({ pathname: '/game', params: { questionId: question.id } })}
+        onWrite={(text) => router.push({ pathname: '/game', params: { customText: text } })}
+      />
 
       <AddPlayerBottomSheet
         key={editingPlayer?.id ?? 'new'}
