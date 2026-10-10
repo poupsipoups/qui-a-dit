@@ -1,8 +1,8 @@
 export const Colors = {
   background: "#F6C8D5",
   ink: "#141B66",
-  action: "#3D5CF0",
-  actionPressed: "#2F49D0",
+  action: "#1236F0",
+  actionPressed: "#0C28C4",
   white: "#FFFFFF",
   cream: "#FFF8EA",
   sky: "#D2EEFF",

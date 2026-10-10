@@ -9,7 +9,7 @@ export type Expression = 'happy' | 'curious' | 'hush' | 'thinking' | 'laugh' | '
 /** Le personnage n’a pas de corps : c’est l’écran lui-même, comme sur l’icône. Seules les joues changent de teinte. */
 const palettes: Record<CharacterBackground, { cheek: string; line: string }> = {
   pink: { cheek: '#F2A9C3', line: Colors.ink },
-  blue: { cheek: '#7E95F7', line: Colors.white },
+  blue: { cheek: '#5F7AF7', line: Colors.white },
   cream: { cheek: '#FFC6B8', line: Colors.ink },
   anis: { cheek: '#FF9EC4', line: Colors.ink },
   orange: { cheek: '#E8590C', line: Colors.ink },

@@ -1,4 +1,5 @@
-import { StyleSheet, Text, TextInput, View } from 'react-native';
+import { StyleSheet, Text, TextInput } from 'react-native';
+import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
 
 import { CandyCard, PillButton } from '@/components/design';
 import { Colors, Spacing, Type } from '@/theme/tokens';
@@ -7,7 +8,7 @@ type Props = { question: string; draft: string; onChange: (value: string) => voi
 
 export function AnswerPhase({ question, draft, onChange, onSubmit }: Props) {
   return (
-    <View style={styles.screen}>
+    <KeyboardAvoidingView behavior="padding" style={styles.screen}>
       <CandyCard style={styles.card}>
         <Text style={styles.question}>{question}</Text>
       </CandyCard>
@@ -19,12 +20,14 @@ export function AnswerPhase({ question, draft, onChange, onSubmit }: Props) {
         placeholderTextColor={Colors.muted}
         multiline
         autoFocus
+        returnKeyType="done"
+        submitBehavior="blurAndSubmit"
         maxLength={280}
         style={styles.input}
       />
       <Text style={styles.count}>{draft.length}/280</Text>
       <PillButton label="Valider et passer le téléphone" disabled={!draft.trim()} onPress={onSubmit} />
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 
