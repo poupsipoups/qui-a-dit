@@ -1,6 +1,6 @@
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
-import { AvatarImage, CandyCard, PillButton } from '@/components/design';
+import { AvatarImage, CandyCard, Character, PillButton } from '@/components/design';
 import type { Player } from '@/features/players/types';
 import { Colors, Spacing, Type } from '@/theme/tokens';
 
@@ -11,6 +11,7 @@ export function VotePhase({ answer, players, availableIds, onVote, onUndo }: Pro
   const forcedPlayer = players.find((player) => player.id === availableIds[0]);
   return (
     <ScrollView contentContainerStyle={styles.screen}>
+      <View style={styles.face}><Character expression="thinking" background="cream" size={110} /></View>
       <Text style={styles.title}>Qui a dit…</Text>
       <CandyCard tone="white" style={styles.answerCard}>
         <Text style={styles.answer}>“{answer}”</Text>
@@ -49,6 +50,7 @@ export function VotePhase({ answer, players, availableIds, onVote, onUndo }: Pro
 
 const styles = StyleSheet.create({
   screen: { padding: Spacing.lg, gap: Spacing.lg },
+  face: { alignItems: 'center', marginBottom: -Spacing.sm },
   title: { color: Colors.ink, ...Type.title, textAlign: 'center' },
   answerCard: { padding: Spacing.lg },
   answer: { color: Colors.ink, ...Type.answer, textAlign: 'center' },

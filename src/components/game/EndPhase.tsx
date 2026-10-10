@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native';
 
-import { AvatarImage, Mascot, PillButton } from '@/components/design';
+import { AvatarImage, Character, PillButton } from '@/components/design';
 import type { Player } from '@/features/players/types';
 import { Colors, Spacing, Type } from '@/theme/tokens';
 
@@ -9,7 +9,7 @@ type Props = { players: Player[]; found: number; total: number; onReplay: () => 
 export function EndPhase({ players, found, total, onReplay, onHome }: Props) {
   return (
     <View style={styles.screen}>
-      <Mascot size={96} />
+      <Character expression="love" background="pink" size={170} />
       <Text style={styles.title}>C’est fini !</Text>
       <Text style={styles.detail}>
         Le groupe a trouvé {found} auteur{found > 1 ? 's' : ''} sur {total}.

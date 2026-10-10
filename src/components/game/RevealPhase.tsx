@@ -2,7 +2,7 @@ import * as Haptics from 'expo-haptics';
 import { StyleSheet, Text, View } from 'react-native';
 import Animated, { FadeIn, ZoomIn } from 'react-native-reanimated';
 
-import { AvatarImage, CandyCard, PillButton } from '@/components/design';
+import { AvatarImage, CandyCard, Character, PillButton } from '@/components/design';
 import type { Player } from '@/features/players/types';
 import { Colors, Spacing, Type } from '@/theme/tokens';
 
@@ -34,6 +34,7 @@ export function RevealPhase({ answer, guessed, author, revealed, isLast, onRevea
       ) : (
         <>
           <Animated.View entering={ZoomIn.springify().damping(14)} style={styles.result}>
+            <Character expression={correct ? 'laugh' : 'shock'} background={correct ? 'anis' : 'orange'} size={120} />
             <Text style={styles.resultLabel}>{correct ? 'Bien vu, c’était…' : 'Raté, c’était…'}</Text>
             {author && <AvatarImage uri={author.photoUri} name={author.name} size={180} />}
             <Text style={styles.author}>{author?.name}</Text>
