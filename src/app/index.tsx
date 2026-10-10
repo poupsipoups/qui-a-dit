@@ -86,7 +86,6 @@ export default function HomeScreen() {
         onRemove={confirmRemovePlayer}
         visible={sheetVisible}
         onClose={() => setSheetVisible(false)}
-        onOpen={() => setSheetVisible(true)}
         onAddPlayer={addPlayer}
       />
     </SafeAreaView>

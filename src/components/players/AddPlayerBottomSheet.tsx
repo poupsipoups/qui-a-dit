@@ -11,22 +11,24 @@ import { Colors, Radius, Spacing, Type } from '@/theme/tokens';
 
 function createPlayerId() { return `player-${Date.now()}-${Math.random().toString(36).slice(2)}`; }
 
-export function AddPlayerBottomSheet({ visible, players, editing = null, onClose, onOpen, onAddPlayer, onUpdatePlayer, onRemove }: { visible: boolean; players: readonly Player[]; editing?: Player | null; onClose: () => void; onOpen: () => void; onAddPlayer: (player: Player) => Promise<void>; onUpdatePlayer: (player: Player) => Promise<void>; onRemove?: (player: Player) => void }) {
+export function AddPlayerBottomSheet({ visible, players, editing = null, onClose, onAddPlayer, onUpdatePlayer, onRemove }: { visible: boolean; players: readonly Player[]; editing?: Player | null; onClose: () => void; onAddPlayer: (player: Player) => Promise<void>; onUpdatePlayer: (player: Player) => Promise<void>; onRemove?: (player: Player) => void }) {
   // Le parent change la `key` quand `editing` change : l'état initial suffit.
   const [name, setName] = useState(editing?.name ?? '');
   const [photoUri, setPhotoUri] = useState<string | null>(editing?.photoUri ?? null);
   const [saving, setSaving] = useState(false);
+  const [picking, setPicking] = useState(false);
   const [playerId, setPlayerId] = useState(createPlayerId);
   // Choisi à l'ouverture : l'aperçu est le personnage final, couleur non utilisée en priorité.
   const [character, setCharacter] = useState(() => (editing ? characterOf(editing) : pickCharacter(players)));
 
   const close = () => { if (!saving) onClose(); };
+  // La fiche reste ouverte pendant le sélecteur : le prénom saisi et la position ne bougent pas.
   const choosePhoto = async (source: 'library' | 'camera') => {
-    onClose();
-    await new Promise((resolve) => setTimeout(resolve, 350));
+    if (picking) return;
+    setPicking(true);
     try { const uri = await pickPlayerPhoto(source); if (uri) setPhotoUri(uri); }
     catch (error) { Alert.alert('Photo indisponible', error instanceof Error ? error.message : 'Réessaie dans un instant.'); }
-    finally { onOpen(); }
+    finally { setPicking(false); }
   };
   const save = async () => {
     const cleanName = name.trim();
@@ -53,9 +55,16 @@ export function AddPlayerBottomSheet({ visible, players, editing = null, onClose
         <View style={styles.content}>
           <View style={styles.face}>
             <Text style={styles.title}>{editing ? 'Modifier le joueur' : 'Nouveau joueur'}</Text>
-            <Pressable accessibilityRole="button" accessibilityLabel="Choisir une photo dans la galerie" onPress={() => choosePhoto('library')}>
-              <AvatarImage uri={photoUri ?? undefined} seed={playerId} character={character} size={96} />
-            </Pressable>
+            <View>
+              <Pressable accessibilityRole="button" accessibilityLabel="Choisir une photo dans la galerie" onPress={() => choosePhoto('library')}>
+                <AvatarImage uri={photoUri ?? undefined} seed={playerId} character={character} size={96} />
+              </Pressable>
+              {photoUri && (
+                <Pressable accessibilityRole="button" accessibilityLabel="Retirer la photo" onPress={() => setPhotoUri(null)} hitSlop={10} style={styles.clearPhoto}>
+                  <Feather name="x" size={16} color={Colors.white} />
+                </Pressable>
+              )}
+            </View>
             <View style={styles.sources}>
               <SourceChip icon="image" label="Galerie" onPress={() => choosePhoto('library')} />
               <SourceChip icon="camera" label="Appareil photo" onPress={() => choosePhoto('camera')} />
@@ -97,6 +106,7 @@ const styles = StyleSheet.create({
   content: { width: '100%', flex: 1, paddingHorizontal: Spacing.lg, paddingTop: Spacing.md, paddingBottom: Spacing.md, gap: Spacing.lg, justifyContent: 'flex-end' },
   face: { alignItems: 'center', gap: Spacing.sm + 2 },
   title: { color: Colors.ink, ...Type.title, textAlign: 'center' },
+  clearPhoto: { position: 'absolute', top: -2, right: -2, width: 30, height: 30, borderRadius: 15, backgroundColor: Colors.ink, alignItems: 'center', justifyContent: 'center' },
   sources: { flexDirection: 'row', gap: Spacing.sm },
   chip: { minHeight: 44, flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: Spacing.md, borderRadius: Radius.pill, borderWidth: 1.5, borderColor: Colors.hairline },
   chipPressed: { opacity: 0.5 },
