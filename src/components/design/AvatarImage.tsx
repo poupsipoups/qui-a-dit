@@ -3,12 +3,12 @@ import { Image, StyleSheet, Text, View, type ImageSourcePropType } from 'react-n
 import { playerInitials } from '@/features/players/initials';
 import { Colors } from '@/theme/tokens';
 
-const fills = [Colors.anis, Colors.sky, Colors.orange, Colors.white] as const;
+const fills = [Colors.anis, Colors.sky, Colors.orange, Colors.background] as const;
 const fillFor = (name: string) => fills[Array.from(name).reduce((sum, char) => sum + char.codePointAt(0)!, 0) % fills.length];
 
-export function AvatarImage({ uri, name, size = 62, selected = false, disabled = false }: { uri?: string; name: string; size?: number; selected?: boolean; disabled?: boolean }) {
+export function AvatarImage({ uri, name, size = 62, selected = false, disabled = false, fill }: { uri?: string; name: string; size?: number; selected?: boolean; disabled?: boolean; fill?: string }) {
   const initials = playerInitials(name);
-  return <View style={[styles.avatar, { width: size, height: size, borderRadius: size / 2, backgroundColor: fillFor(name) }, selected && styles.selected, disabled && styles.disabled]}>{uri ? <Image source={{ uri } as ImageSourcePropType} resizeMode="cover" style={styles.image} /> : <Text style={[styles.initials, { fontSize: size * 0.38 }]}>{initials}</Text>}</View>;
+  return <View style={[styles.avatar, { width: size, height: size, borderRadius: size / 2, backgroundColor: fill ?? fillFor(name) }, selected && styles.selected, disabled && styles.disabled]}>{uri ? <Image source={{ uri } as ImageSourcePropType} resizeMode="cover" style={styles.image} /> : <Text style={[styles.initials, { fontSize: size * 0.38 }]}>{initials}</Text>}</View>;
 }
 
 const styles = StyleSheet.create({

@@ -37,7 +37,7 @@ export function VotePhase({ answer, players, availableIds, onVote, onUndo }: Pro
                 onPress={() => onVote(player.id)}
                 style={styles.choice}>
                 <AvatarImage uri={player.photoUri} name={player.name} size={96} disabled={!available} />
-                <Text style={[styles.name, !available && styles.nameDisabled]} numberOfLines={2}>{player.name}</Text>
+                <Text style={[styles.name, !available && styles.nameDisabled]} numberOfLines={1}>{player.name}</Text>
               </Pressable>
             );
           })}

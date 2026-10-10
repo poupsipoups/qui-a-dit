@@ -1,3 +1,4 @@
+import { View } from 'react-native';
 import Svg, { Circle, ClipPath, Defs, Ellipse, Path } from 'react-native-svg';
 
 import { Colors } from '@/theme/tokens';
@@ -42,7 +43,8 @@ export function Character({ expression = 'happy', background = 'pink', size = 16
   );
 
   return (
-    <Svg width={size} height={size * (150 / 210)} viewBox="0 0 210 150" accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
+    <View accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
+    <Svg width={size} height={size * (150 / 210)} viewBox="0 0 210 150">
       <Circle cx={36} cy={104} r={15} fill={p.cheek} />
       <Circle cx={176} cy={102} r={15} fill={p.cheek} />
       {expression === 'happy' && (
@@ -91,5 +93,6 @@ export function Character({ expression = 'happy', background = 'pink', size = 16
         </>
       )}
     </Svg>
+    </View>
   );
 }

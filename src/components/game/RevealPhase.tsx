@@ -26,7 +26,7 @@ export function RevealPhase({ answer, guessed, author, revealed, isLast, onRevea
         <>
           <CandyCard tone="sky" style={styles.choice}>
             <Text style={styles.label}>Vous aviez choisi</Text>
-            {guessed && <AvatarImage uri={guessed.photoUri} name={guessed.name} size={110} />}
+            {guessed && <AvatarImage uri={guessed.photoUri} name={guessed.name} size={110} fill={Colors.white} />}
             <Text style={styles.guessed}>{guessed?.name ?? 'personne'}</Text>
           </CandyCard>
           <PillButton label="Révéler" onPress={reveal} />
