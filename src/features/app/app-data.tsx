@@ -4,6 +4,7 @@ import { createContext, useContext, useEffect, useState, type PropsWithChildren 
 import { removePlayerPhoto } from '@/features/players/photo';
 import type { Player } from '@/features/players/types';
 import { seedQuestions } from '@/features/questions/seed';
+import { normalizeQuestionText } from '@/features/questions/normalize';
 import { fetchRemoteQuestions, submitRemoteQuestion } from '@/features/questions/remote';
 import type { Question } from '@/features/questions/types';
 import { supabase } from '@/lib/supabase';
@@ -25,10 +26,6 @@ type AppData = {
 };
 
 const AppDataContext = createContext<AppData | null>(null);
-
-function normalize(text: string) {
-  return text.normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().replace(/\s+/g, ' ').toLocaleLowerCase();
-}
 
 export function AppDataProvider({ children }: PropsWithChildren) {
   const [players, setPlayers] = useState<Player[]>([]);
@@ -80,7 +77,7 @@ export function AppDataProvider({ children }: PropsWithChildren) {
   const addLocalSuggestion = async (text: string) => {
     const cleaned = text.trim().replace(/\s+/g, ' ');
     const allQuestions = remoteQuestions.length ? remoteQuestions : [...seedQuestions, ...suggestions];
-    if (allQuestions.some((question) => normalize(question.text) === normalize(cleaned))) return 'duplicate';
+    if (allQuestions.some((question) => normalizeQuestionText(question.text) === normalizeQuestionText(cleaned))) return 'duplicate';
     if (supabase) {
       const result = await submitRemoteQuestion(cleaned);
       if (result === 'duplicate') return result;
