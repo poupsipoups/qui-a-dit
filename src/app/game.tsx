@@ -10,6 +10,7 @@ import { GameTopbar } from '@/components/game/GameTopbar';
 import { EndPhase } from '@/components/game/EndPhase';
 import { HandoffPhase } from '@/components/game/HandoffPhase';
 import { IntroPhase } from '@/components/game/IntroPhase';
+import { StartGameSheet } from '@/components/game/StartGameSheet';
 import { RevealPhase } from '@/components/game/RevealPhase';
 import { VotePhase } from '@/components/game/VotePhase';
 import { useAppData } from '@/features/app/app-data';
@@ -26,9 +27,9 @@ const backgrounds: Record<Background, string> = { pink: Colors.background, blue:
 const goHome = () => router.replace('/');
 
 export default function GameScreen() {
-  const { questionId, customText } = useLocalSearchParams<{ questionId?: string; customText?: string }>();
-  // La clé repart d’une manche neuve quand on rejoue avec une autre question.
-  return <Game key={questionId ?? customText} questionId={questionId} customText={customText} />;
+  const { questionId, customText, run } = useLocalSearchParams<{ questionId?: string; customText?: string; run?: string }>();
+  // La clé repart d’une manche neuve à chaque rejouer, même avec la même question (`run`).
+  return <Game key={`${questionId ?? customText}-${run}`} questionId={questionId} customText={customText} />;
 }
 
 function Game({ questionId, customText }: { questionId?: string; customText?: string }) {
@@ -66,13 +67,15 @@ function Party({ round: initialRound }: { round: Round }) {
     return () => subscription.remove();
   }, [inProgress, leave]);
 
-  // Rejouer : mêmes joueurs, nouvelle question active (différente si possible).
-  const replay = () => {
-    const active = questions.filter((item) => !disabledQuestionIds.includes(item.id));
-    const others = active.filter((item) => item.id !== initialRound.question.id);
-    const pool = others.length ? others : active;
+  // Rejouer : mêmes joueurs, on redonne le choix de la question (au hasard : différente si possible).
+  const [replayVisible, setReplayVisible] = useState(false);
+  const activeQuestions = useMemo(() => questions.filter((item) => !disabledQuestionIds.includes(item.id)), [questions, disabledQuestionIds]);
+  const replayWith = (params: { questionId?: string; customText?: string }) => router.replace({ pathname: '/game', params: { ...params, run: String(Date.now()) } });
+  const replayRandom = () => {
+    const others = activeQuestions.filter((item) => item.id !== initialRound.question.id);
+    const pool = others.length ? others : activeQuestions;
     const next = pool[Math.floor(Math.random() * pool.length)];
-    if (next) router.replace({ pathname: '/game', params: { questionId: next.id } });
+    if (next) replayWith({ questionId: next.id });
   };
 
   const [revealedIndex, setRevealedIndex] = useState<number | null>(null);
@@ -164,10 +167,18 @@ function Party({ round: initialRound }: { round: Round }) {
         players={round.turnOrder.map((id) => playerById.get(id)).filter((player): player is Player => !!player)}
         found={round.votes.filter((vote) => answerForId(round, vote.answerId)?.authorId === vote.guessedPlayerId).length}
         total={total}
-        onReplay={replay}
+        onReplay={() => setReplayVisible(true)}
         onAddQuestion={isCustomQuestion(round.question) && !questionSaved ? async () => { await addLocalSuggestion(round.question.text); setQuestionSaved(true); } : undefined}
         onSkipAddQuestion={() => setQuestionSaved(true)}
         onHome={goHome}
+      />
+      <StartGameSheet
+        visible={replayVisible}
+        questions={activeQuestions}
+        onClose={() => setReplayVisible(false)}
+        onRandom={replayRandom}
+        onPick={(question) => replayWith({ questionId: question.id })}
+        onWrite={(text) => replayWith({ customText: text })}
       />
     </Frame>
   );
