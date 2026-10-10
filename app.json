@@ -4,18 +4,18 @@
     "slug": "qui-a-dit",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/app-icon.png",
+    "backgroundColor": "#F6C8D5",
     "scheme": "quiadit",
-    "userInterfaceStyle": "automatic",
+    "userInterfaceStyle": "light",
     "ios": {
-      "icon": "./assets/expo.icon"
+      "backgroundColor": "#F6C8D5",
+      "bundleIdentifier": "com.poupsipoups.qui-a-dit"
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
-        "foregroundImage": "./assets/images/android-icon-foreground.png",
-        "backgroundImage": "./assets/images/android-icon-background.png",
-        "monochromeImage": "./assets/images/android-icon-monochrome.png"
+        "backgroundColor": "#F6C8D5",
+        "foregroundImage": "./assets/images/app-icon.png"
       },
       "predictiveBackGestureEnabled": false
     },
@@ -26,11 +26,19 @@
     "plugins": [
       "expo-router",
       [
+        "expo-image-picker",
+        {
+          "photosPermission": "Qui a dit ? accède à tes photos pour créer les joueurs.",
+          "cameraPermission": "Qui a dit ? accède à l’appareil photo pour créer les joueurs.",
+          "microphonePermission": false
+        }
+      ],
+      [
         "expo-splash-screen",
         {
-          "backgroundColor": "#B9FF48",
-          "image": "./assets/images/splash-icon.png",
-          "imageWidth": 76
+          "backgroundColor": "#F6C8D5",
+          "image": "./assets/images/app-icon.png",
+          "imageWidth": 220
         }
       ]
     ],

@@ -1,4 +1,12 @@
-# Welcome to your Expo app 👋
+# Qui a dit ?
+
+Jeu de soirée Expo (un téléphone, réponses anonymes, vote « Qui a dit »).
+
+**Spécification produit :** [docs/spec.md](./docs/spec.md)
+
+**Plan d’implémentation :** [docs/plan.md](./docs/plan.md)
+
+---
 
 This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
 
