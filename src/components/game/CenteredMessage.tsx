@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native';
 
 import { PillButton } from '@/components/design';
-import { Colors, Spacing } from '@/theme/tokens';
+import { Colors, Spacing, Type } from '@/theme/tokens';
 
 type Props = { title: string; detail?: string; actionLabel: string; onAction: () => void };
 
@@ -17,6 +17,6 @@ export function CenteredMessage({ title, detail, actionLabel, onAction }: Props)
 
 const styles = StyleSheet.create({
   screen: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: Spacing.xl, gap: Spacing.lg },
-  title: { color: Colors.ink, fontSize: 31, fontWeight: '800', textAlign: 'center' },
-  detail: { color: Colors.muted, fontSize: 17, textAlign: 'center', lineHeight: 24 },
+  title: { color: Colors.ink, ...Type.title, textAlign: 'center' },
+  detail: { color: Colors.muted, ...Type.body, textAlign: 'center' },
 });

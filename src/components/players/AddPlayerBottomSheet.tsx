@@ -5,7 +5,7 @@ import { Alert, Pressable, StyleSheet, Text, TextInput, View } from 'react-nativ
 import { AvatarImage, PillButton } from '@/components/design';
 import { persistPlayerPhoto, pickPlayerPhoto } from '@/features/players/photo';
 import type { Player } from '@/features/players/types';
-import { Colors, Spacing } from '@/theme/tokens';
+import { Colors, Spacing, Type } from '@/theme/tokens';
 
 function createPlayerId() { return `player-${Date.now()}-${Math.random().toString(36).slice(2)}`; }
 
@@ -26,20 +26,19 @@ export function AddPlayerBottomSheet({ visible, onClose, onOpen, onAddPlayer }: 
     const cleanName = name.trim();
     if (!cleanName) return Alert.alert('Il manque un prénom', 'Ajoute le prénom du joueur.');
     if (cleanName.length > 40) return Alert.alert('Prénom trop long', 'Choisis un prénom de 40 caractères maximum.');
-    if (!photoUri) return Alert.alert('Il manque une photo', 'Ajoute une photo : elle sert pendant le vote.');
     const id = createPlayerId();
     setSaving(true);
     try {
-      const savedPhoto = await persistPlayerPhoto(photoUri, id);
+      const savedPhoto = photoUri ? await persistPlayerPhoto(photoUri, id) : undefined;
       await onAddPlayer({ id, name: cleanName, photoUri: savedPhoto, createdAt: new Date().toISOString() });
       setName(''); setPhotoUri(null); onClose();
     } catch { Alert.alert('Impossible d’ajouter ce joueur', 'La photo n’a pas pu être enregistrée.'); }
     finally { setSaving(false); }
   };
 
-  return <BottomSheet index={visible ? 0 : -1} onClose={onClose} snapPoints={['50%', '90%']} enablePanDownToClose backgroundStyle={{ backgroundColor: '#FFF7FA' }}><BottomSheetView style={styles.host}><View style={styles.content}><Text style={styles.title}>Nouveau joueur</Text><Pressable onPress={() => choosePhoto('library')} style={styles.photoPicker}>{photoUri ? <AvatarImage uri={photoUri} name={name || '?'} size={108} /> : <Text style={styles.photoPickerText}>Ajouter une photo</Text>}</Pressable><View style={styles.photoActions}><Pressable onPress={() => choosePhoto('library')}><Text style={styles.link}>Galerie</Text></Pressable><Text style={styles.dot}>·</Text><Pressable onPress={() => choosePhoto('camera')}><Text style={styles.link}>Appareil photo</Text></Pressable></View><TextInput value={name} onChangeText={setName} placeholder="Prénom" placeholderTextColor={Colors.muted} autoCapitalize="words" maxLength={40} style={styles.input} /><View style={styles.buttons}><PillButton label="Annuler" secondary onPress={close} /><PillButton label={saving ? 'Ajout…' : 'Ajouter'} onPress={save} disabled={saving} /></View></View></BottomSheetView></BottomSheet>;
+  return <BottomSheet index={visible ? 0 : -1} onClose={onClose} snapPoints={['50%', '90%']} enablePanDownToClose backgroundStyle={{ backgroundColor: Colors.sheet }}><BottomSheetView style={styles.host}><View style={styles.content}><Text style={styles.title}>Nouveau joueur</Text><Pressable accessibilityRole="button" accessibilityLabel="Ajouter une photo" onPress={() => choosePhoto('library')} style={styles.photoPicker}><AvatarImage uri={photoUri ?? undefined} name={name} size={108} /></Pressable><View style={styles.photoActions}><Pressable accessibilityRole="button" hitSlop={14} onPress={() => choosePhoto('library')}><Text style={styles.link}>Galerie</Text></Pressable><Text style={styles.dot}>·</Text><Pressable accessibilityRole="button" hitSlop={14} onPress={() => choosePhoto('camera')}><Text style={styles.link}>Appareil photo</Text></Pressable></View><TextInput value={name} onChangeText={setName} placeholder="Prénom" placeholderTextColor={Colors.muted} autoCapitalize="words" maxLength={40} style={styles.input} /><View style={styles.buttons}><PillButton label="Annuler" secondary onPress={close} /><PillButton label={saving ? 'Ajout…' : 'Ajouter'} onPress={save} disabled={saving} /></View></View></BottomSheetView></BottomSheet>;
 }
 
 const styles = StyleSheet.create({
-  host: { flex: 1, width: '100%' }, content: { width: '100%', flex: 1, padding: Spacing.lg, gap: Spacing.md, justifyContent: 'flex-start' }, title: { color: Colors.ink, fontSize: 26, fontWeight: '800', textAlign: 'center' }, photoPicker: { alignSelf: 'center', width: 108, height: 108, borderRadius: 54, backgroundColor: Colors.lavender, alignItems: 'center', justifyContent: 'center' }, photoPickerText: { color: Colors.berry, fontWeight: '700', textAlign: 'center', paddingHorizontal: Spacing.sm }, photoActions: { flexDirection: 'row', justifyContent: 'center', gap: Spacing.sm }, link: { color: Colors.berry, fontWeight: '700' }, dot: { color: Colors.muted }, input: { minHeight: 54, borderRadius: 18, backgroundColor: Colors.white, paddingHorizontal: Spacing.md, color: Colors.ink, fontSize: 17 }, buttons: { flexDirection: 'row', gap: Spacing.sm },
+  host: { flex: 1, width: '100%' }, content: { width: '100%', flex: 1, padding: Spacing.lg, gap: Spacing.md, justifyContent: 'flex-start' }, title: { color: Colors.ink, ...Type.title, textAlign: 'center' }, photoPicker: { alignSelf: 'center', width: 108, height: 108, borderRadius: 54, backgroundColor: Colors.sky, alignItems: 'center', justifyContent: 'center' }, photoPickerText: { color: Colors.ink, ...Type.label, textAlign: 'center', paddingHorizontal: Spacing.sm }, photoActions: { flexDirection: 'row', justifyContent: 'center', gap: Spacing.sm }, link: { color: Colors.action, ...Type.label }, dot: { color: Colors.muted }, input: { minHeight: 54, borderRadius: 18, backgroundColor: Colors.white, paddingHorizontal: Spacing.md, color: Colors.ink, ...Type.body }, buttons: { flexDirection: 'row', gap: Spacing.sm },
 });
