@@ -53,10 +53,14 @@ export function Character({ expression = 'happy', background = 'pink', size = 16
       )}
       {expression === 'secret' && (
         <>
+          <Defs>
+            <ClipPath id="secretEyeL"><Path d="M54 64 C56 44 94 44 96 64 C94 82 58 84 54 64 Z" /></ClipPath>
+            <ClipPath id="secretEyeR"><Path d="M118 64 C120 48 158 48 160 64 C158 78 122 80 118 64 Z" /></ClipPath>
+          </Defs>
           <Path d="M54 64 C56 44 94 44 96 64 C94 82 58 84 54 64 Z" fill={Colors.white} />
           <Path d="M118 64 C120 48 158 48 160 64 C158 78 122 80 118 64 Z" fill={Colors.white} />
-          <Ellipse cx={87} cy={66} rx={9} ry={11} fill={Colors.ink} />
-          <Ellipse cx={150} cy={65} rx={9} ry={9} fill={Colors.ink} />
+          <Ellipse cx={92} cy={66} rx={10} ry={12} fill={Colors.ink} clipPath="url(#secretEyeL)" />
+          <Ellipse cx={155} cy={65} rx={10} ry={10} fill={Colors.ink} clipPath="url(#secretEyeR)" />
           <Path d="M92 108 C102 114 120 114 130 102" {...stroke} />
         </>
       )}
