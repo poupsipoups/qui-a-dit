@@ -1,0 +1,37 @@
+-- Remplace les questions officielles par des questions courtes, à réponse immédiate.
+delete from public.questions where origin = 'official';
+
+insert into public.questions (text, normalized_text, origin) values
+  ('Quel est ton plat préféré ?', '', 'official'),
+  ('Quelle chanson tu écoutes en boucle en ce moment ?', '', 'official'),
+  ('Quel est ton parfum de glace préféré ?', '', 'official'),
+  ('Quelle boisson tu commandes en soirée ?', '', 'official'),
+  ('Quelle est la première chose que tu fais le matin ?', '', 'official'),
+  ('Quelle appli tu ouvres le plus ?', '', 'official'),
+  ('À quelle heure tu te couches d’habitude ?', '', 'official'),
+  ('Quel mot tu répètes tout le temps ?', '', 'official'),
+  ('Quel est ton emoji préféré ?', '', 'official'),
+  ('Quel animal serais-tu ?', '', 'official'),
+  ('Quel super-pouvoir tu choisirais ?', '', 'official'),
+  ('Quel est ton talent le plus inutile ?', '', 'official'),
+  ('Quel est ton surnom le plus ridicule ?', '', 'official'),
+  ('Quel métier tu voulais faire à 8 ans ?', '', 'official'),
+  ('Quelle chanson tu écoutes en cachette ?', '', 'official'),
+  ('Quel est ton dernier achat inutile ?', '', 'official'),
+  ('Quel est le dernier truc que tu as googlé ?', '', 'official'),
+  ('Un truc que tu fais mal mais que tu adores ?', '', 'official'),
+  ('Quelle est ta destination de rêve ?', '', 'official'),
+  ('Tu fais combien de fois caca par jour en moyenne ?', '', 'official'),
+  ('Tu changes de draps tous les combien ?', '', 'official'),
+  ('Tu as combien de temps d’écran par jour en moyenne ?', '', 'official'),
+  ('Combien de mails non lus tu as sur l’appli de ton téléphone ?', '', 'official'),
+  ('Quelle est la dernière chose que tu as perdue ?', '', 'official'),
+  ('Quel est le prénom que tu ne donnerais jamais à ton enfant ?', '', 'official'),
+  ('Comment tu surnommes ton ou ta partenaire ? (et si tu n’en as pas, comment tu le ou la surnommerais ?)', '', 'official'),
+  ('Quelle règle absurde tu imposerais à tout le monde ?', '', 'official'),
+  ('Quel est le pire truc à dire à un premier rendez-vous ?', '', 'official'),
+  ('Quel serait ton nom de scène de rappeur ou de rappeuse ?', '', 'official'),
+  ('Quel serait le titre de ta biographie ?', '', 'official'),
+  ('Quelle serait ta phrase d’accroche sur une appli de rencontre ?', '', 'official'),
+  ('Quelle théorie du complot tu trouves un peu crédible ?', '', 'official')
+on conflict (normalized_text) do nothing;
