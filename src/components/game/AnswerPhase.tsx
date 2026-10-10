@@ -2,7 +2,7 @@ import { StyleSheet, Text, TextInput, View } from 'react-native';
 import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
 
 import { CandyCard, Character, PillButton } from '@/components/design';
-import { Colors, Spacing, Type } from '@/theme/tokens';
+import { Colors, Spacing, Type, Fonts } from '@/theme/tokens';
 
 type Props = { question: string; draft: string; onChange: (value: string) => void; onSubmit: () => void };
 
@@ -39,6 +39,6 @@ const styles = StyleSheet.create({
   face: { alignItems: 'center' },
   card: { padding: Spacing.md },
   question: { color: Colors.ink, ...Type.answer },
-  input: { height: 92, padding: Spacing.md, borderRadius: 24, backgroundColor: Colors.white, color: Colors.ink, ...Type.heading, fontWeight: '500', textAlignVertical: 'top' },
+  input: { height: 92, padding: Spacing.md, borderRadius: 24, backgroundColor: Colors.white, color: Colors.ink, ...Type.heading, fontFamily: Fonts.medium, textAlignVertical: 'top' },
   count: { color: Colors.muted, ...Type.caption, alignSelf: 'flex-end' },
 });

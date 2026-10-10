@@ -17,7 +17,7 @@ export function GameTopbar({ label, onLeave, onDark = false }: { label: string; 
 
 const styles = StyleSheet.create({
   bar: { minHeight: 56, paddingHorizontal: Spacing.lg, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-  label: { color: Colors.ink, ...Type.label, fontWeight: '800' },
+  label: { color: Colors.ink, ...Type.label },
   quitHit: { minHeight: 44, minWidth: 44, justifyContent: 'center', alignItems: 'flex-end' },
   quit: { color: Colors.ink, ...Type.label },
   onDark: { color: Colors.white },

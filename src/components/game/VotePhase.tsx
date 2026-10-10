@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
   answer: { color: Colors.ink, ...Type.answer, textAlign: 'center' },
   grid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', rowGap: Spacing.lg, columnGap: Spacing.sm },
   choice: { width: '31%', minHeight: 44, alignItems: 'center', gap: Spacing.xs },
-  name: { color: Colors.ink, ...Type.body, fontWeight: '700', textAlign: 'center' },
+  name: { color: Colors.ink, ...Type.label, textAlign: 'center' },
   nameDisabled: { color: Colors.muted },
   forced: { alignItems: 'center', gap: Spacing.sm },
   forcedLabel: { color: Colors.muted, ...Type.label },

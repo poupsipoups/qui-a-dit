@@ -21,12 +21,23 @@ export const Spacing = { xs: 6, sm: 10, md: 16, lg: 24, xl: 32 } as const;
 export const Radius = { card: 28, pill: 999, photo: 999 } as const;
 
 /** Échelle typographique unique : lisible à bout de bras sur un téléphone partagé. */
+/** Une famille par graisse (polices Google : le nom porte la graisse, pas `fontWeight`). */
+export const Fonts = {
+  medium: "Outfit_500Medium",
+  semibold: "Outfit_600SemiBold",
+  bold: "Outfit_700Bold",
+  extrabold: "Outfit_800ExtraBold",
+  caps: "Quicksand_700Bold",
+} as const;
+
 export const Type = {
-  hero: { fontSize: 40, lineHeight: 44, fontWeight: "800" },
-  title: { fontSize: 32, lineHeight: 38, fontWeight: "800" },
-  answer: { fontSize: 26, lineHeight: 34, fontWeight: "700" },
-  heading: { fontSize: 22, lineHeight: 28, fontWeight: "700" },
-  body: { fontSize: 18, lineHeight: 25, fontWeight: "600" },
-  label: { fontSize: 16, lineHeight: 22, fontWeight: "700" },
-  caption: { fontSize: 14, lineHeight: 19, fontWeight: "600" },
+  hero: { fontFamily: Fonts.extrabold, fontSize: 40, lineHeight: 44 },
+  title: { fontFamily: Fonts.extrabold, fontSize: 32, lineHeight: 38 },
+  answer: { fontFamily: Fonts.bold, fontSize: 26, lineHeight: 34 },
+  heading: { fontFamily: Fonts.bold, fontSize: 22, lineHeight: 28 },
+  body: { fontFamily: Fonts.semibold, fontSize: 18, lineHeight: 25 },
+  label: { fontFamily: Fonts.bold, fontSize: 16, lineHeight: 22 },
+  caption: { fontFamily: Fonts.semibold, fontSize: 14, lineHeight: 19 },
+  /** Capitales espacées, police fine : consignes et boutons d'action. */
+  caps: { fontFamily: Fonts.caps, fontSize: 14, lineHeight: 20, letterSpacing: 2, textTransform: "uppercase" },
 } as const;
