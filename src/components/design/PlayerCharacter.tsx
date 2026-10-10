@@ -4,7 +4,8 @@ import type { Character } from '@/features/players/types';
 import { Colors } from '@/theme/tokens';
 
 const palettes = [
-  { bg: Colors.background, cheek: '#F2A9C3', line: Colors.ink },
+  // Rose bonbon, plus soutenu que Colors.background : la carte du joueur ne se fond pas dans le fond de l'écran.
+  { bg: '#FF8DB7', cheek: '#F2538E', line: Colors.ink },
   { bg: Colors.action, cheek: '#5F7AF7', line: Colors.white },
   { bg: Colors.anis, cheek: '#FF9EC4', line: Colors.ink },
   { bg: Colors.orange, cheek: '#E8590C', line: Colors.ink },
