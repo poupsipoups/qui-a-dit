@@ -19,7 +19,7 @@ export function VotePhase({ answer, players, availableIds, onVote, onUndo }: Pro
       {forced ? (
         <CandyCard tone="sky" style={styles.forced}>
           <Text style={styles.forcedLabel}>Plus qu’une personne possible</Text>
-          {forcedPlayer && <AvatarImage uri={forcedPlayer.photoUri} seed={forcedPlayer.id} size={120} />}
+          {forcedPlayer && <AvatarImage uri={forcedPlayer.photoUri} seed={forcedPlayer.id} character={forcedPlayer.character} size={120} />}
           <Text style={styles.forcedName}>{forcedPlayer?.name}</Text>
           <PillButton label="Valider ce dernier choix" onPress={() => onVote(availableIds[0])} />
         </CandyCard>
@@ -36,7 +36,7 @@ export function VotePhase({ answer, players, availableIds, onVote, onUndo }: Pro
                 disabled={!available}
                 onPress={() => onVote(player.id)}
                 style={styles.choice}>
-                <AvatarImage uri={player.photoUri} seed={player.id} size={96} disabled={!available} />
+                <AvatarImage uri={player.photoUri} seed={player.id} character={player.character} size={96} disabled={!available} />
                 <Text style={[styles.name, !available && styles.nameDisabled]} numberOfLines={2}>{player.name}</Text>
               </Pressable>
             );

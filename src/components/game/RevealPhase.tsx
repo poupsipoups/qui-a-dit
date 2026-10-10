@@ -25,7 +25,7 @@ export function RevealPhase({ answer, guessed, author, revealed, isLast, onRevea
         <>
           <CandyCard tone="sky" style={styles.choice}>
             <Text style={styles.label}>Vous aviez choisi</Text>
-            {guessed && <AvatarImage uri={guessed.photoUri} seed={guessed.id} size={110} />}
+            {guessed && <AvatarImage uri={guessed.photoUri} seed={guessed.id} character={guessed.character} size={110} />}
             <Text style={styles.guessed}>{guessed?.name ?? 'personne'}</Text>
           </CandyCard>
           <PillButton label="Révéler" onPress={reveal} />
@@ -35,7 +35,7 @@ export function RevealPhase({ answer, guessed, author, revealed, isLast, onRevea
           <View style={styles.result}>
             <Character expression={correct ? 'laugh' : 'sad'} background={correct ? 'anis' : 'orange'} size={120} />
             <Text style={styles.resultLabel}>{correct ? 'Bien vu, c’était…' : 'Raté, c’était…'}</Text>
-            {author && <AvatarImage uri={author.photoUri} seed={author.id} size={180} />}
+            {author && <AvatarImage uri={author.photoUri} seed={author.id} character={author.character} size={180} />}
             <Text style={styles.author}>{author?.name}</Text>
             <Text style={styles.mark}>{correct ? 'Le groupe a trouvé !' : 'Personne n’y avait pensé !'}</Text>
           </View>

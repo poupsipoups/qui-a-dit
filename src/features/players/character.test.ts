@@ -1,4 +1,5 @@
-import { CHARACTER_COLORS, CHARACTER_KINDS, characterFor } from './character';
+import { CHARACTER_COLORS, CHARACTER_KINDS, characterFor, characterOf, pickCharacter } from './character';
+import type { Player } from './types';
 
 describe('characterFor', () => {
   it('est stable pour un même seed', () => {
@@ -14,9 +15,34 @@ describe('characterFor', () => {
       expect(color).toBeLessThan(CHARACTER_COLORS);
     }
   });
+});
 
-  it('varie selon le seed', () => {
-    const combos = new Set(Array.from({ length: 100 }, (_, i) => JSON.stringify(characterFor(`id-${i}`))));
-    expect(combos.size).toBeGreaterThan(5);
+describe('characterOf', () => {
+  it('préfère le personnage enregistré, sinon retombe sur l’id', () => {
+    expect(characterOf({ id: 'a', character: { kind: 2, color: 4 } })).toEqual({ kind: 2, color: 4 });
+    expect(characterOf({ id: 'a' })).toEqual(characterFor('a'));
+  });
+});
+
+describe('pickCharacter', () => {
+  it('donne 5 couleurs différentes aux 5 premiers joueurs, quel que soit le hasard', () => {
+    for (let run = 0; run < 50; run += 1) {
+      const players: Pick<Player, 'id' | 'character'>[] = [];
+      for (let i = 0; i < CHARACTER_COLORS; i += 1) players.push({ id: `p${i}`, character: pickCharacter(players) });
+      expect(new Set(players.map((p) => p.character!.color)).size).toBe(CHARACTER_COLORS);
+    }
+  });
+
+  it('réutilise les couleurs de façon équilibrée au-delà de 5', () => {
+    const players: Pick<Player, 'id' | 'character'>[] = [];
+    for (let i = 0; i < 10; i += 1) players.push({ id: `p${i}`, character: pickCharacter(players) });
+    const counts = Array.from({ length: CHARACTER_COLORS }, (_, c) => players.filter((p) => p.character!.color === c).length);
+    expect(counts.every((n) => n === 2)).toBe(true);
+  });
+
+  it('compte aussi les joueurs sans personnage enregistré', () => {
+    const legacy = { id: 'old-1' };
+    const picked = pickCharacter([legacy], () => 0);
+    expect(picked.color).not.toBe(characterFor('old-1').color);
   });
 });

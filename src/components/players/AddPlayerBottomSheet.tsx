@@ -4,16 +4,19 @@ import { Alert, Pressable, StyleSheet, Text, TextInput, View } from 'react-nativ
 
 import { AvatarImage, PillButton } from '@/components/design';
 import { persistPlayerPhoto, pickPlayerPhoto } from '@/features/players/photo';
+import { pickCharacter } from '@/features/players/character';
 import type { Player } from '@/features/players/types';
 import { Colors, Spacing, Type } from '@/theme/tokens';
 
 function createPlayerId() { return `player-${Date.now()}-${Math.random().toString(36).slice(2)}`; }
 
-export function AddPlayerBottomSheet({ visible, onClose, onOpen, onAddPlayer }: { visible: boolean; onClose: () => void; onOpen: () => void; onAddPlayer: (player: Player) => Promise<void> }) {
+export function AddPlayerBottomSheet({ visible, players, onClose, onOpen, onAddPlayer }: { visible: boolean; players: readonly Player[]; onClose: () => void; onOpen: () => void; onAddPlayer: (player: Player) => Promise<void> }) {
   const [name, setName] = useState('');
   const [photoUri, setPhotoUri] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [playerId, setPlayerId] = useState(createPlayerId);
+  // Choisi à l'ouverture : l'aperçu est le personnage final, couleur non utilisée en priorité.
+  const [character, setCharacter] = useState(() => pickCharacter(players));
 
   const close = () => { if (!saving) onClose(); };
   const choosePhoto = async (source: 'library' | 'camera') => {
@@ -31,13 +34,13 @@ export function AddPlayerBottomSheet({ visible, onClose, onOpen, onAddPlayer }: 
     setSaving(true);
     try {
       const savedPhoto = photoUri ? await persistPlayerPhoto(photoUri, id) : undefined;
-      await onAddPlayer({ id, name: cleanName, photoUri: savedPhoto, createdAt: new Date().toISOString() });
-      setName(''); setPhotoUri(null); setPlayerId(createPlayerId()); onClose();
+      await onAddPlayer({ id, name: cleanName, photoUri: savedPhoto, createdAt: new Date().toISOString(), character });
+      setName(''); setPhotoUri(null); setPlayerId(createPlayerId()); setCharacter(pickCharacter([...players, { id, character }])); onClose();
     } catch { Alert.alert('Impossible d’ajouter ce joueur', 'La photo n’a pas pu être enregistrée.'); }
     finally { setSaving(false); }
   };
 
-  return <BottomSheet index={visible ? 0 : -1} onClose={onClose} snapPoints={['50%', '90%']} enablePanDownToClose backgroundStyle={{ backgroundColor: Colors.sheet }}><BottomSheetView style={styles.host}><View style={styles.content}><Text style={styles.title}>Nouveau joueur</Text><Pressable accessibilityRole="button" accessibilityLabel="Ajouter une photo" onPress={() => choosePhoto('library')} style={styles.photoPicker}><AvatarImage uri={photoUri ?? undefined} seed={playerId} size={108} /></Pressable><View style={styles.photoActions}><Pressable accessibilityRole="button" hitSlop={14} onPress={() => choosePhoto('library')}><Text style={styles.link}>Galerie</Text></Pressable><Text style={styles.dot}>·</Text><Pressable accessibilityRole="button" hitSlop={14} onPress={() => choosePhoto('camera')}><Text style={styles.link}>Appareil photo</Text></Pressable></View><TextInput value={name} onChangeText={setName} placeholder="Prénom" placeholderTextColor={Colors.muted} autoCapitalize="words" maxLength={40} style={styles.input} /><View style={styles.buttons}><PillButton label="Annuler" secondary onPress={close} /><PillButton label={saving ? 'Ajout…' : 'Ajouter'} onPress={save} disabled={saving} /></View></View></BottomSheetView></BottomSheet>;
+  return <BottomSheet index={visible ? 0 : -1} onClose={onClose} snapPoints={['50%', '90%']} enablePanDownToClose backgroundStyle={{ backgroundColor: Colors.sheet }}><BottomSheetView style={styles.host}><View style={styles.content}><Text style={styles.title}>Nouveau joueur</Text><Pressable accessibilityRole="button" accessibilityLabel="Ajouter une photo" onPress={() => choosePhoto('library')} style={styles.photoPicker}><AvatarImage uri={photoUri ?? undefined} seed={playerId} character={character} size={108} /></Pressable><View style={styles.photoActions}><Pressable accessibilityRole="button" hitSlop={14} onPress={() => choosePhoto('library')}><Text style={styles.link}>Galerie</Text></Pressable><Text style={styles.dot}>·</Text><Pressable accessibilityRole="button" hitSlop={14} onPress={() => choosePhoto('camera')}><Text style={styles.link}>Appareil photo</Text></Pressable></View><TextInput value={name} onChangeText={setName} placeholder="Prénom" placeholderTextColor={Colors.muted} autoCapitalize="words" maxLength={40} style={styles.input} /><View style={styles.buttons}><PillButton label="Annuler" secondary onPress={close} /><PillButton label={saving ? 'Ajout…' : 'Ajouter'} onPress={save} disabled={saving} /></View></View></BottomSheetView></BottomSheet>;
 }
 
 const styles = StyleSheet.create({

@@ -10,7 +10,7 @@ export function HandoffPhase({ player, tone, onReady }: { player: Player; tone: 
       <View style={styles.face}><Character expression="hush" background="pink" size={130} /></View>
       <Text style={styles.label}>Passe le téléphone à</Text>
       <CandyCard tone={tone} style={styles.card}>
-        <AvatarImage uri={player.photoUri} seed={player.id} size={180} />
+        <AvatarImage uri={player.photoUri} seed={player.id} character={player.character} size={180} />
         <Text style={styles.name}>{player.name}</Text>
       </CandyCard>
       <Text style={styles.hint}>Personne ne regarde la suite</Text>

@@ -1,6 +1,6 @@
 import Svg, { Circle, Ellipse, Path } from 'react-native-svg';
 
-import { characterFor } from '@/features/players/character';
+import type { Character } from '@/features/players/types';
 import { Colors } from '@/theme/tokens';
 
 const palettes = [
@@ -12,8 +12,7 @@ const palettes = [
 ] as const;
 
 /** Visage tiré de l'icône de l'app : yeux blancs inclinés, grosses pupilles, joues rondes. Rogné en cercle par le parent. */
-export function PlayerCharacter({ seed }: { seed: string }) {
-  const { kind, color } = characterFor(seed);
+export function PlayerCharacter({ character: { kind, color } }: { character: Character }) {
   const p = palettes[color];
   const stroke = { stroke: p.line, strokeWidth: 5.5, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const, fill: 'none' };
   const eyes = (dx: number, dy: number) => (
