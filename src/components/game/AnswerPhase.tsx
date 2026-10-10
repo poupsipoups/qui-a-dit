@@ -1,7 +1,7 @@
-import { StyleSheet, Text, TextInput } from 'react-native';
+import { StyleSheet, Text, TextInput, View } from 'react-native';
 import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
 
-import { CandyCard, PillButton } from '@/components/design';
+import { CandyCard, Character, PillButton } from '@/components/design';
 import { Colors, Spacing, Type } from '@/theme/tokens';
 
 type Props = { question: string; draft: string; onChange: (value: string) => void; onSubmit: () => void };
@@ -9,6 +9,7 @@ type Props = { question: string; draft: string; onChange: (value: string) => voi
 export function AnswerPhase({ question, draft, onChange, onSubmit }: Props) {
   return (
     <KeyboardAvoidingView behavior="padding" style={styles.screen}>
+      <View style={styles.face}><Character expression="hush" background="pink" size={72} /></View>
       <CandyCard style={styles.card}>
         <Text style={styles.question}>{question}</Text>
       </CandyCard>
@@ -33,8 +34,9 @@ export function AnswerPhase({ question, draft, onChange, onSubmit }: Props) {
 
 const styles = StyleSheet.create({
   screen: { flex: 1, padding: Spacing.lg, gap: Spacing.md },
-  card: { padding: Spacing.lg },
+  face: { alignItems: 'center' },
+  card: { padding: Spacing.md },
   question: { color: Colors.ink, ...Type.answer },
-  input: { flex: 1, minHeight: 120, padding: Spacing.md, borderRadius: 24, backgroundColor: Colors.white, color: Colors.ink, ...Type.heading, fontWeight: '500', textAlignVertical: 'top' },
+  input: { flex: 1, minHeight: 80, padding: Spacing.md, borderRadius: 24, backgroundColor: Colors.white, color: Colors.ink, ...Type.heading, fontWeight: '500', textAlignVertical: 'top' },
   count: { color: Colors.muted, ...Type.caption, alignSelf: 'flex-end' },
 });
