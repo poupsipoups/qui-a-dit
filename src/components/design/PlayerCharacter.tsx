@@ -11,6 +11,8 @@ const palettes = [
   { bg: Colors.sky, cheek: '#FFB3C7', line: Colors.ink },
 ] as const;
 
+export const characterPalette = ({ color }: Character) => palettes[color];
+
 /** Visage tiré de l'icône de l'app : yeux blancs inclinés, grosses pupilles, joues rondes. Rogné en cercle par le parent. */
 export function PlayerCharacter({ character: { kind, color } }: { character: Character }) {
   const p = palettes[color];
