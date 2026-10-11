@@ -4,9 +4,9 @@ import { AvatarImage, Character, PillButton } from '@/components/design';
 import type { Player } from '@/features/players/types';
 import { Colors, Spacing, Type } from '@/theme/tokens';
 
-type Props = { players: Player[]; found: number; total: number; onReplay: () => void; onHome: () => void };
+type Props = { players: Player[]; found: number; total: number; onReplay: () => void; onHome: () => void; onAddQuestion?: () => void; onSkipAddQuestion?: () => void };
 
-export function EndPhase({ players, found, total, onReplay, onHome }: Props) {
+export function EndPhase({ players, found, total, onReplay, onHome, onAddQuestion, onSkipAddQuestion }: Props) {
   return (
     <View style={styles.screen}>
       <Character expression="laugh" background="pink" size={170} />
@@ -17,6 +17,15 @@ export function EndPhase({ players, found, total, onReplay, onHome }: Props) {
       <View style={styles.faces}>
         {players.map((player) => <AvatarImage key={player.id} uri={player.photoUri} seed={player.id} character={player.character} size={56} />)}
       </View>
+      {onAddQuestion && (
+        <View style={styles.addQuestion}>
+          <Text style={styles.detail}>Ajouter cette question à la liste ?</Text>
+          <View style={styles.addQuestionActions}>
+            <View style={styles.addQuestionAction}><PillButton label="Non" secondary outlined onPress={() => onSkipAddQuestion?.()} /></View>
+            <View style={styles.addQuestionAction}><PillButton label="Oui" onPress={onAddQuestion} /></View>
+          </View>
+        </View>
+      )}
       <View style={styles.actions}>
         <PillButton label="Rejouer avec les mêmes" onPress={onReplay} />
         <PillButton label="Retour à l’accueil" secondary onPress={onHome} />
@@ -30,5 +39,8 @@ const styles = StyleSheet.create({
   title: { color: Colors.ink, ...Type.hero, textAlign: 'center' },
   detail: { color: Colors.muted, ...Type.body, textAlign: 'center' },
   faces: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: Spacing.sm },
+  addQuestion: { alignSelf: 'stretch', gap: Spacing.sm },
+  addQuestionActions: { flexDirection: 'row', gap: Spacing.sm },
+  addQuestionAction: { flex: 1 },
   actions: { alignSelf: 'stretch', gap: Spacing.sm, marginTop: Spacing.md },
 });

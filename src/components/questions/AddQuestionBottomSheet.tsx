@@ -5,8 +5,8 @@ import { Alert, StyleSheet, Text, TextInput, View } from 'react-native';
 import { PillButton } from '@/components/design';
 import { Colors, Spacing, Type } from '@/theme/tokens';
 
-const MAX_LENGTH = 180;
-const MIN_LENGTH = 8;
+export const MAX_LENGTH = 180;
+export const MIN_LENGTH = 8;
 
 export function AddQuestionBottomSheet({ visible, onClose, onAdd }: { visible: boolean; onClose: () => void; onAdd: (text: string) => Promise<'added' | 'duplicate'> }) {
   const [text, setText] = useState('');
